@@ -1,5 +1,7 @@
 package mori;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -11,6 +13,10 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.exec.OS;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
@@ -30,6 +36,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import mori.preference.AboutPage;
+import mori.preference.BasePreferencePage;
+import mori.preference.ConnectionPreferencePage;
+import mori.preference.MyPreferenceDialog;
+import mori.preference.PreferenceConstants;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -49,6 +60,8 @@ public class Main {
     public static final int MINIMUM_SIZE_WIDTH_MAC = 720;
     public static final int MINIMUM_SIZE_HEIGHT = 670;
 
+    public static final String MASTER_PASSWORD = "changeme!"; //$NON-NLS-1$
+
     private Button appLoadBtn;
     private List<LambdaFunction> funcList;
     private List<Button> checkBoxList = new ArrayList<Button>();
@@ -59,14 +72,42 @@ public class Main {
     private Button bulkOnBtn;
     private Button bulkOffBtn;
     private Button addBtn;
-    // private LambdaClient awsLambda;
+    private Button settingsBtn;
+
+    private PreferenceStore ps;
+    private PreferenceDialog preferenceDialog;
 
     private Map<String, LambdaFunction> fullAppMap;
-    private List<String> srcApps = new ArrayList<String>();
 
     public static void main(String[] args) {
         Main main = new Main();
+        main.initialize();
         main.createPart();
+    }
+
+    private void initialize() {
+        try {
+            String homeDir = System.getProperty("user.home"); //$NON-NLS-1$
+            this.ps = new PreferenceStore(homeDir + "\\serverlesstool.properties"); //$NON-NLS-1$
+            if (OS.isFamilyMac()) {
+                this.ps = new PreferenceStore(homeDir + "/serverlesstool.properties"); //$NON-NLS-1$
+            }
+            try {
+                this.ps.load();
+            } catch (FileNotFoundException fnfe) {
+                this.ps = new PreferenceStore("serverlesstool.properties"); //$NON-NLS-1$
+                this.ps.load();
+            }
+        } catch (FileNotFoundException fnfe) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            this.ps.setDefault(PreferenceConstants.PROXY_AUTH, "none"); //$NON-NLS-1$
+            this.ps.setDefault(PreferenceConstants.ENV_EXEC_WRAPPER, "/opt/otel-handler"); //$NON-NLS-1$
+        } catch (Exception e) {
+            // e.printStackTrace();
+        }
     }
 
     private void createPart() {
@@ -273,6 +314,32 @@ public class Main {
                     Region region = Region.AP_NORTHEAST_1;
                     LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
                     updateFunctionConfiguration(awsLambda, func.getName(), environment, layerArns);
+                }
+            }
+        });
+
+        settingsBtn = new Button(buttonGrp, SWT.NULL);
+        GridData settingsBtnGrDt = new GridData(GridData.FILL_BOTH);
+        settingsBtnGrDt.verticalAlignment = SWT.BOTTOM;
+        settingsBtn.setLayoutData(settingsBtnGrDt);
+        settingsBtn.setText("Settings");
+        settingsBtn.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent event) {
+                PreferenceManager mgr = new PreferenceManager();
+                PreferenceNode baseNode = new PreferenceNode("base", new BasePreferencePage(shell)); //$NON-NLS-1$
+                PreferenceNode connectionNode = new PreferenceNode("connection", new ConnectionPreferencePage()); //$NON-NLS-1$
+                mgr.addToRoot(baseNode);
+                mgr.addToRoot(connectionNode);
+                PreferenceNode aboutNode = new PreferenceNode("about", new AboutPage()); //$NON-NLS-1$
+                mgr.addToRoot(aboutNode);
+                preferenceDialog = new MyPreferenceDialog(shell, mgr);
+                preferenceDialog.setPreferenceStore(ps);
+                preferenceDialog.open();
+                try {
+                    ps.save();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
                 }
             }
         });

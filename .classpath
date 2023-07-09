@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="output" path="bin/default"/>
 	<classpathentry output="bin/main" kind="src" path="src/main/java">
 		<attributes>
 			<attribute name="gradle_scope" value="main"/>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="bin/default"/>
+	<classpathentry output="bin/main" kind="src" path="src/main/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/s3/2.20.90/b496e98fe4001ddf69df9139a8d7bf0e1475d64a/s3-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/s3/2.20.90/89089079e9326945491d5e6d816eb371ace23d27/s3-2.20.90.jar">
 		<attributes>
@@ -64,6 +70,16 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-exec/1.3/efd2543e352e55ce5a685eed6db8af028b737905/commons-exec-1.3-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-exec/1.3/8dfb9facd0830a27b1b5f29f84593f0aeee7773b/commons-exec-1.3.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/b49dafc9cfef24c356827f322e773e7c26725dd2/commons-lang3-3.4-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.jasypt/jasypt/1.9.3/9fe5c909addd00e1f3c27af8b64e22ee98922dcc/jasypt-1.9.3-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.jasypt/jasypt/1.9.3/d99ef9540f51c617f2a293b460f025d2ee563dd/jasypt-1.9.3.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
