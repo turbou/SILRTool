@@ -104,6 +104,7 @@ public class Main {
         }
         try {
             this.ps.setDefault(PreferenceConstants.PROXY_AUTH, "none"); //$NON-NLS-1$
+            this.ps.setDefault(PreferenceConstants.REGION, "ap-northeast-1"); //$NON-NLS-1$
             this.ps.setDefault(PreferenceConstants.ENV_EXEC_WRAPPER, "/opt/otel-handler"); //$NON-NLS-1$
         } catch (Exception e) {
             // e.printStackTrace();
@@ -140,7 +141,7 @@ public class Main {
         appLoadBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Region region = Region.AP_NORTHEAST_1;
+                Region region = Region.of(ps.getString(PreferenceConstants.REGION));
                 LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
                 System.out.println("start");
                 listFunctions(awsLambda);
@@ -247,14 +248,14 @@ public class Main {
                     Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
                     if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) {
                         String value = valueMap2.get("AWS_LAMBDA_EXEC_WRAPPER");
-                        if (value.equals("/opt/otel-handler")) {
+                        if (value.equals(ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER))) {
                             System.out.println("there is already a wrapper on this function ... skipping");
                         } else {
                             valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER");
                         }
                     }
-                    valueMap2.putIfAbsent("AWS_LAMBDA_EXEC_WRAPPER", "/opt/otel-handler");
-                    valueMap2.putIfAbsent("CONTRAST_BUCKET", "contrast-4u3yh-contrasts3bucket-103dyfnbq1dn4");
+                    valueMap2.putIfAbsent("AWS_LAMBDA_EXEC_WRAPPER", ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER));
+                    valueMap2.putIfAbsent("CONTRAST_BUCKET", ps.getString(PreferenceConstants.ENV_S3_BUCKET));
                     Environment environment = Environment.builder().variables(valueMap2).build();
 
                     List<Layer> layers = func.getConfig().layers();
@@ -267,13 +268,13 @@ public class Main {
                         }
                     }
                     if (func.getRuntime().toLowerCase().startsWith("nodejs")) {
-                        layerArns.add("arn:aws:lambda:ap-northeast-1:570099478530:layer:contrast-instrumentation-extension-nodejs-x86_64-v1-3-0:1");
+                        layerArns.add(ps.getString(PreferenceConstants.LAYER_ARN_NODEJS));
                     } else if (func.getRuntime().toLowerCase().startsWith("python")) {
-                        layerArns.add("arn:aws:lambda:ap-northeast-1:570099478530:layer:contrast-instrumentation-extension-python-x86_64-v1-3-0:1");
+                        layerArns.add(ps.getString(PreferenceConstants.LAYER_ARN_PYTHON));
                     } else {
                         System.out.println(String.format("Layer not found for runtime %s", func.getRuntime()));
                     }
-                    Region region = Region.AP_NORTHEAST_1;
+                    Region region = Region.of(ps.getString(PreferenceConstants.REGION));
                     LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
                     updateFunctionConfiguration(awsLambda, func.getName(), environment, layerArns);
                 }
@@ -313,7 +314,7 @@ public class Main {
                         }
                     }
 
-                    Region region = Region.AP_NORTHEAST_1;
+                    Region region = Region.of(ps.getString(PreferenceConstants.REGION));
                     LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
                     updateFunctionConfiguration(awsLambda, func.getName(), environment, layerArns);
                 }

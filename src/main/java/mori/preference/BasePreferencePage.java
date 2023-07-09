@@ -24,7 +24,9 @@
 package mori.preference;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -35,6 +37,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -45,10 +48,12 @@ import org.eclipse.swt.widgets.Text;
 
 import mori.Messages;
 import mori.ServerLessToolShell;
+import software.amazon.awssdk.regions.Region;
 
 public class BasePreferencePage extends PreferencePage {
 
     private ServerLessToolShell shell;
+    private Combo regionCombo;
     private Text connectionTimeoutTxt;
     private Text socketTimeoutTxt;
     private Text envExecWrapperTxt;
@@ -70,6 +75,27 @@ public class BasePreferencePage extends PreferencePage {
         compositeLt.horizontalSpacing = 10;
         compositeLt.verticalSpacing = 20;
         composite.setLayout(compositeLt);
+
+        Composite regionComp = new Composite(composite, SWT.NONE);
+        GridLayout regionCompLt = new GridLayout(2, false);
+        regionComp.setLayout(regionCompLt);
+        GridData regionCompGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        regionComp.setLayoutData(regionCompGrDt);
+
+        new Label(regionComp, SWT.LEFT).setText("リージョン:");
+
+        regionCombo = new Combo(regionComp, SWT.READ_ONLY);
+        GridData regionComboGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        regionCombo.setLayoutData(regionComboGrDt);
+        List<Region> sorted = Region.regions().stream().sorted(Comparator.comparing(Region::id)).collect(Collectors.toList());
+        int selectIdx = -1;
+        for (Region region : sorted) {
+            if (region.toString().equals(ps.getString(PreferenceConstants.REGION))) {
+                selectIdx = sorted.indexOf(region);
+            }
+            regionCombo.add(region.toString());
+        }
+        regionCombo.select(selectIdx);
 
         Group timeoutGrp = new Group(composite, SWT.NONE);
         GridLayout timeoutGrpLt = new GridLayout(2, false);
@@ -163,6 +189,13 @@ public class BasePreferencePage extends PreferencePage {
             return true;
         }
         List<String> errors = new ArrayList<String>();
+
+        if (this.regionCombo.getText().isEmpty()) {
+            errors.add(Messages.getString("connectionpreferencepage.message.dialog.connection.timeout.empty.error.message")); //$NON-NLS-1$
+        } else {
+            ps.setValue(PreferenceConstants.REGION, this.regionCombo.getText());
+        }
+
         if (this.connectionTimeoutTxt.getText().isEmpty()) {
             errors.add(Messages.getString("connectionpreferencepage.message.dialog.connection.timeout.empty.error.message")); //$NON-NLS-1$
         } else {
