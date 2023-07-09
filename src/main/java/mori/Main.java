@@ -157,13 +157,13 @@ public class Main {
         GridData orgTableGrpGrDt = new GridData(GridData.FILL_BOTH);
         // orgTableGrpGrDt.horizontalSpan = 3;
         orgTableGrp.setLayoutData(orgTableGrpGrDt);
-        orgTableGrp.setText("Function List");
+        orgTableGrp.setText("関数一覧");
 
         srcListFilter = new Text(orgTableGrp, SWT.BORDER);
         GridData srcListFilterGrDt = new GridData(GridData.FILL_HORIZONTAL);
         // srcListFilterGrDt.horizontalSpan = 1;
         srcListFilter.setLayoutData(srcListFilterGrDt);
-        srcListFilter.setMessage("Filter...");
+        srcListFilter.setMessage("フィルタ...");
         srcListFilter.addModifyListener(new ModifyListener() {
             @Override
             public void modifyText(ModifyEvent event) {
@@ -185,18 +185,20 @@ public class Main {
         column1.setText("");
         TableColumn column2 = new TableColumn(table, SWT.LEFT);
         column2.setWidth(600);
-        column2.setText("Function Name");
+        column2.setText("関数名");
         TableColumn column3 = new TableColumn(table, SWT.LEFT);
         column3.setWidth(150);
-        column3.setText("Runtime");
+        column3.setText("ランタイム");
 
         Composite buttonGrp = new Composite(orgTableGrp, SWT.NONE);
-        buttonGrp.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+        GridData buttonGrpGrDt = new GridData(GridData.FILL_VERTICAL);
+        buttonGrpGrDt.verticalSpan = 2;
+        buttonGrp.setLayoutData(buttonGrpGrDt);
         buttonGrp.setLayout(new GridLayout(1, true));
 
         bulkOnBtn = new Button(buttonGrp, SWT.NULL);
         bulkOnBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        bulkOnBtn.setText("All On");
+        bulkOnBtn.setText("全て On");
         bulkOnBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -213,7 +215,7 @@ public class Main {
 
         bulkOffBtn = new Button(buttonGrp, SWT.NULL);
         bulkOffBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        bulkOffBtn.setText("All Off");
+        bulkOffBtn.setText("全て Off");
         bulkOffBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -229,7 +231,7 @@ public class Main {
 
         addBtn = new Button(buttonGrp, SWT.NULL);
         addBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        addBtn.setText("Add Layer");
+        addBtn.setText("レイヤー登録");
         addBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent event) {
@@ -280,7 +282,7 @@ public class Main {
 
         final Button rmvBtn = new Button(buttonGrp, SWT.NULL);
         rmvBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        rmvBtn.setText("Remove Layer");
+        rmvBtn.setText("レイヤー削除");
         rmvBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -322,7 +324,7 @@ public class Main {
         GridData settingsBtnGrDt = new GridData(GridData.FILL_BOTH);
         settingsBtnGrDt.verticalAlignment = SWT.BOTTOM;
         settingsBtn.setLayoutData(settingsBtnGrDt);
-        settingsBtn.setText("Settings");
+        settingsBtn.setText("設定");
         settingsBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent event) {
@@ -351,7 +353,6 @@ public class Main {
         this.srcCount.setFont(new Font(display, "Arial", 12, SWT.NORMAL)); //$NON-NLS-1$
         this.srcCount.setText("0"); //$NON-NLS-1$
         this.srcCount.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-        new Label(orgTableGrp, SWT.LEFT).setText(""); //$NON-NLS-1$
 
         shell.open();
         try {
