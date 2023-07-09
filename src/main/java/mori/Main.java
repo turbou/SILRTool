@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -32,9 +33,14 @@ import org.eclipse.swt.widgets.Text;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.Environment;
+import software.amazon.awssdk.services.lambda.model.EnvironmentResponse;
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
 import software.amazon.awssdk.services.lambda.model.LambdaException;
+import software.amazon.awssdk.services.lambda.model.Layer;
 import software.amazon.awssdk.services.lambda.model.ListFunctionsResponse;
+import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationRequest;
+import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
 
 public class Main {
 
@@ -53,6 +59,7 @@ public class Main {
     private Button bulkOnBtn;
     private Button bulkOffBtn;
     private Button addBtn;
+    // private LambdaClient awsLambda;
 
     private Map<String, LambdaFunction> fullAppMap;
     private List<String> srcApps = new ArrayList<String>();
@@ -185,16 +192,88 @@ public class Main {
         addBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent event) {
+                List<LambdaFunction> targetFuncs = new ArrayList<LambdaFunction>();
+                for (Button chkBtn : checkBoxList) {
+                    if (chkBtn.getSelection()) {
+                        targetFuncs.add(funcList.get(checkBoxList.indexOf(chkBtn)));
+                    }
+                }
+                for (LambdaFunction func : targetFuncs) {
+                    EnvironmentResponse envRes = func.getConfig().environment();
+                    Map<String, String> valueMap = envRes.variables();
+                    Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
+                    if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) {
+                        String value = valueMap2.get("AWS_LAMBDA_EXEC_WRAPPER");
+                        if (value.equals("/opt/otel-handler")) {
+                            System.out.println("there is already a wrapper on this function ... skipping");
+                        } else {
+                            valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER");
+                        }
+                    }
+                    valueMap2.putIfAbsent("AWS_LAMBDA_EXEC_WRAPPER", "/opt/otel-handler");
+                    valueMap2.putIfAbsent("CONTRAST_BUCKET", "contrast-4u3yh-contrasts3bucket-103dyfnbq1dn4");
+                    Environment environment = Environment.builder().variables(valueMap2).build();
+
+                    List<Layer> layers = func.getConfig().layers();
+                    List<String> layerArns = new ArrayList<String>();
+                    for (Layer layer : layers) {
+                        String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
+                        System.out.println(layerName);
+                        if (!layerName.startsWith("contrast-instrumentation-extension")) {
+                            layerArns.add(layer.arn());
+                        }
+                    }
+                    if (func.getRuntime().toLowerCase().startsWith("nodejs")) {
+                        layerArns.add("arn:aws:lambda:ap-northeast-1:570099478530:layer:contrast-instrumentation-extension-nodejs-x86_64-v1-3-0:1");
+                    } else if (func.getRuntime().toLowerCase().startsWith("python")) {
+                        layerArns.add("arn:aws:lambda:ap-northeast-1:570099478530:layer:contrast-instrumentation-extension-python-x86_64-v1-3-0:1");
+                    } else {
+                        System.out.println(String.format("Layer not found for runtime %s", func.getRuntime()));
+                    }
+                    Region region = Region.AP_NORTHEAST_1;
+                    LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
+                    updateFunctionConfiguration(awsLambda, func.getName(), environment, layerArns);
+                }
             }
         });
 
         final Button rmvBtn = new Button(buttonGrp, SWT.NULL);
         rmvBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         rmvBtn.setText("Remove Layer");
-        rmvBtn.setEnabled(false);
         rmvBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
+                List<LambdaFunction> targetFuncs = new ArrayList<LambdaFunction>();
+                for (Button chkBtn : checkBoxList) {
+                    if (chkBtn.getSelection()) {
+                        targetFuncs.add(funcList.get(checkBoxList.indexOf(chkBtn)));
+                    }
+                }
+                for (LambdaFunction func : targetFuncs) {
+                    EnvironmentResponse envRes = func.getConfig().environment();
+                    Map<String, String> valueMap = envRes.variables();
+                    Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
+                    if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) {
+                        valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER");
+                    }
+                    if (valueMap2.containsKey("CONTRAST_BUCKET")) {
+                        valueMap2.remove("CONTRAST_BUCKET");
+                    }
+                    Environment environment = Environment.builder().variables(valueMap2).build();
+
+                    List<Layer> layers = func.getConfig().layers();
+                    List<String> layerArns = new ArrayList<String>();
+                    for (Layer layer : layers) {
+                        String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
+                        if (!layerName.startsWith("contrast-instrumentation-extension")) {
+                            layerArns.add(layer.arn());
+                        }
+                    }
+
+                    Region region = Region.AP_NORTHEAST_1;
+                    LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
+                    updateFunctionConfiguration(awsLambda, func.getName(), environment, layerArns);
+                }
             }
         });
 
@@ -299,11 +378,9 @@ public class Main {
             for (FunctionConfiguration config : sorted) {
                 System.out.println("The function name is " + config.functionName());
                 // function_data = lambda_client.get_function(FunctionName=function_name).get("Configuration")
-                LambdaFunction func = new LambdaFunction();
-                func.setName(config.functionName());
-                func.setRuntime(config.runtimeAsString());
+                LambdaFunction func = new LambdaFunction(config);
                 funcList.add(func);
-                fullAppMap.put(config.functionName(), func);
+                fullAppMap.put(func.getName(), func);
             }
             for (LambdaFunction func : funcList) {
                 addFuncToTable(func);
@@ -312,6 +389,21 @@ public class Main {
         } catch (LambdaException e) {
             System.err.println(e.getMessage());
             System.exit(1);
+        }
+    }
+
+    private void updateFunctionConfiguration(LambdaClient awsLambda, String functionName, Environment environment, List<String> layers) {
+        try {
+            UpdateFunctionConfigurationRequest configurationRequest = UpdateFunctionConfigurationRequest.builder().functionName(functionName).environment(environment)
+                    .layers(layers).build();
+            UpdateFunctionConfigurationResponse response = awsLambda.updateFunctionConfiguration(configurationRequest);
+            System.out.println(response);
+        } catch (LambdaException le) {
+            le.printStackTrace();
+            System.err.println(le.getMessage());
+            System.exit(1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

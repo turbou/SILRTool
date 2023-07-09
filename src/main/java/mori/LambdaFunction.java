@@ -26,10 +26,19 @@ package mori;
 import java.util.ArrayList;
 import java.util.List;
 
+import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
+
 public class LambdaFunction {
     private String name;
     private String runtime;
     private boolean valid;
+    private FunctionConfiguration config;
+
+    public LambdaFunction(FunctionConfiguration config) {
+        this.name = config.functionName();
+        this.runtime = config.runtimeAsString();
+        this.config = config;
+    }
 
     public String getName() {
         return name;
@@ -53,6 +62,14 @@ public class LambdaFunction {
 
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    public FunctionConfiguration getConfig() {
+        return config;
+    }
+
+    public void setConfig(FunctionConfiguration config) {
+        this.config = config;
     }
 
     @Override
