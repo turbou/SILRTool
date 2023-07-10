@@ -222,18 +222,18 @@ public class BasePreferencePage extends PreferencePage {
         if (this.layerArnPythonTxt.getText().isEmpty()) {
             errors.add("・PythonのテレメトリーレイヤのARNが設定されていません。");
         } else {
-//            if (!this.layerArnPythonTxt.getText().trim().startsWith("arn:aws:lambda:")) {
-//                errors.add("・LambdaのARNではないようです。");
-//            }
+            if (!this.layerArnPythonTxt.getText().trim().startsWith("arn:aws:lambda:")) {
+                errors.add("・LambdaのARNではないようです。");
+            }
             ps.setValue(PreferenceConstants.LAYER_ARN_PYTHON, this.layerArnPythonTxt.getText());
         }
 
         if (this.layerArnNodeJSTxt.getText().isEmpty()) {
             errors.add("・NodeJSのテレメトリーレイヤのARNが設定されていません。");
         } else {
-//            if (!this.layerArnNodeJSTxt.getText().trim().startsWith("arn:aws:lambda:")) {
-//                errors.add("・LambdaのARNではないようです。");
-//            }
+            if (!this.layerArnNodeJSTxt.getText().trim().startsWith("arn:aws:lambda:")) {
+                errors.add("・LambdaのARNではないようです。");
+            }
             ps.setValue(PreferenceConstants.LAYER_ARN_NODEJS, this.layerArnNodeJSTxt.getText());
         }
 
