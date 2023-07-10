@@ -4,15 +4,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.exec.OS;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -53,10 +54,8 @@ import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.model.Environment;
-import software.amazon.awssdk.services.lambda.model.EnvironmentResponse;
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
 import software.amazon.awssdk.services.lambda.model.LambdaException;
-import software.amazon.awssdk.services.lambda.model.Layer;
 import software.amazon.awssdk.services.lambda.model.ListFunctionsResponse;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationRequest;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
@@ -312,39 +311,12 @@ public class Main {
                         targetFuncs.add(funcList.get(checkBoxList.indexOf(chkBtn)));
                     }
                 }
-                for (LambdaFunction func : targetFuncs) {
-                    EnvironmentResponse envRes = func.getConfig().environment();
-                    Map<String, String> valueMap = envRes.variables();
-                    Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
-                    if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) {
-                        String value = valueMap2.get("AWS_LAMBDA_EXEC_WRAPPER");
-                        if (value.equals(ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER))) {
-                            System.out.println("there is already a wrapper on this function ... skipping");
-                        } else {
-                            valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER");
-                        }
-                    }
-                    valueMap2.putIfAbsent("AWS_LAMBDA_EXEC_WRAPPER", ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER));
-                    valueMap2.putIfAbsent("CONTRAST_BUCKET", ps.getString(PreferenceConstants.ENV_S3_BUCKET));
-                    Environment environment = Environment.builder().variables(valueMap2).build();
-
-                    List<Layer> layers = func.getConfig().layers();
-                    List<String> layerArns = new ArrayList<String>();
-                    for (Layer layer : layers) {
-                        String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-                        System.out.println(layerName);
-                        if (!layerName.startsWith("contrast-instrumentation-extension")) {
-                            layerArns.add(layer.arn());
-                        }
-                    }
-                    if (func.getRuntime().toLowerCase().startsWith("nodejs")) {
-                        layerArns.add(ps.getString(PreferenceConstants.LAYER_ARN_NODEJS));
-                    } else if (func.getRuntime().toLowerCase().startsWith("python")) {
-                        layerArns.add(ps.getString(PreferenceConstants.LAYER_ARN_PYTHON));
-                    } else {
-                        System.out.println(String.format("Layer not found for runtime %s", func.getRuntime()));
-                    }
-                    updateFunctionConfiguration(func.getName(), environment, layerArns);
+                LayerWithProgress progress = new AddLayerWithProgress(shell, ps, targetFuncs);
+                ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー登録");
+                try {
+                    progDialog.run(true, true, progress);
+                } catch (InvocationTargetException | InterruptedException e1) {
+                    e1.printStackTrace();
                 }
             }
         });
@@ -362,27 +334,12 @@ public class Main {
                         targetFuncs.add(funcList.get(checkBoxList.indexOf(chkBtn)));
                     }
                 }
-                for (LambdaFunction func : targetFuncs) {
-                    EnvironmentResponse envRes = func.getConfig().environment();
-                    Map<String, String> valueMap = envRes.variables();
-                    Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
-                    if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) {
-                        valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER");
-                    }
-                    if (valueMap2.containsKey("CONTRAST_BUCKET")) {
-                        valueMap2.remove("CONTRAST_BUCKET");
-                    }
-                    Environment environment = Environment.builder().variables(valueMap2).build();
-
-                    List<Layer> layers = func.getConfig().layers();
-                    List<String> layerArns = new ArrayList<String>();
-                    for (Layer layer : layers) {
-                        String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-                        if (!layerName.startsWith("contrast-instrumentation-extension")) {
-                            layerArns.add(layer.arn());
-                        }
-                    }
-                    updateFunctionConfiguration(func.getName(), environment, layerArns);
+                LayerWithProgress progress = new RmvLayerWithProgress(shell, ps, targetFuncs);
+                ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー削除");
+                try {
+                    progDialog.run(true, true, progress);
+                } catch (InvocationTargetException | InterruptedException e2) {
+                    e2.printStackTrace();
                 }
             }
         });
@@ -536,24 +493,6 @@ public class Main {
         } catch (LambdaException e) {
             System.err.println(e.getMessage());
             System.exit(1);
-        }
-    }
-
-    private void updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) {
-        try {
-            Region region = Region.of(ps.getString(PreferenceConstants.REGION));
-            LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
-            UpdateFunctionConfigurationRequest configurationRequest = UpdateFunctionConfigurationRequest.builder().functionName(functionName).environment(environment)
-                    .layers(layers).build();
-            UpdateFunctionConfigurationResponse response = awsLambda.updateFunctionConfiguration(configurationRequest);
-            System.out.println(response);
-            awsLambda.close();
-        } catch (LambdaException le) {
-            le.printStackTrace();
-            System.err.println(le.getMessage());
-            System.exit(1);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
