@@ -24,6 +24,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -79,6 +81,7 @@ public class Main {
     private Button bulkOnBtn;
     private Button bulkOffBtn;
     private Button addBtn;
+    private Button rmvBtn;
     private Button settingsBtn;
 
     private PreferenceStore ps;
@@ -135,6 +138,53 @@ public class Main {
         shell.setImages(imageArray);
         Window.setDefaultImages(imageArray);
         setWindowTitle();
+        shell.addShellListener(new ShellListener() {
+            @Override
+            public void shellIconified(ShellEvent event) {
+            }
+
+            @Override
+            public void shellDeiconified(ShellEvent event) {
+            }
+
+            @Override
+            public void shellDeactivated(ShellEvent event) {
+            }
+
+            @Override
+            public void shellClosed(ShellEvent event) {
+                ps.setValue(PreferenceConstants.MEM_WIDTH, shell.getSize().x);
+                ps.setValue(PreferenceConstants.MEM_HEIGHT, shell.getSize().y);
+                ps.setValue(PreferenceConstants.PROXY_TMP_USER, ""); //$NON-NLS-1$
+                ps.setValue(PreferenceConstants.PROXY_TMP_PASS, ""); //$NON-NLS-1$
+                try {
+                    ps.save();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+
+            @Override
+            public void shellActivated(ShellEvent event) {
+                boolean ngRequiredFields = false;
+                String layerArnPython = ps.getString(PreferenceConstants.LAYER_ARN_PYTHON);
+                String layerArnNodeJS = ps.getString(PreferenceConstants.LAYER_ARN_NODEJS);
+                String envExecWrapper = ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER);
+                String envS3Bucket = ps.getString(PreferenceConstants.ENV_S3_BUCKET);
+                if (layerArnPython.isEmpty() || layerArnNodeJS.isEmpty() || envExecWrapper.isEmpty() || envS3Bucket.isEmpty()) {
+                    ngRequiredFields = true;
+                }
+                if (ngRequiredFields) {
+                    addBtn.setEnabled(false);
+                    rmvBtn.setEnabled(false);
+                } else {
+                    addBtn.setEnabled(true);
+                    rmvBtn.setEnabled(true);
+                }
+                setWindowTitle();
+            }
+        });
+
         fullAppMap = new TreeMap<String, LambdaFunction>();
         funcList = new ArrayList<LambdaFunction>();
 
@@ -156,12 +206,12 @@ public class Main {
         Point bigBtnSize = gc.textExtent(Messages.getString("main.vul.export.button.title"));
         gc.dispose();
         GridData appLoadBtnGrDt = new GridData(GridData.FILL_HORIZONTAL);
-        appLoadBtnGrDt.minimumHeight = 50;
-        appLoadBtnGrDt.heightHint = bigBtnSize.y + 20;
+        appLoadBtnGrDt.minimumHeight = 36;
+        appLoadBtnGrDt.heightHint = bigBtnSize.y + 16;
         appLoadBtnGrDt.horizontalSpan = 3;
         appLoadBtn.setLayoutData(appLoadBtnGrDt);
         appLoadBtn.setText("関数の読み込み");
-        appLoadBtn.setFont(new Font(display, "Arial", 20, SWT.NORMAL)); //$NON-NLS-1$
+        appLoadBtn.setFont(new Font(display, "Arial", 16, SWT.NORMAL)); //$NON-NLS-1$
         appLoadBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -204,7 +254,7 @@ public class Main {
         column1.setWidth(50);
         column1.setText("");
         TableColumn column2 = new TableColumn(table, SWT.LEFT);
-        column2.setWidth(600);
+        column2.setWidth(360);
         column2.setText("関数名");
         TableColumn column3 = new TableColumn(table, SWT.LEFT);
         column3.setWidth(150);
@@ -252,6 +302,7 @@ public class Main {
         addBtn = new Button(buttonGrp, SWT.NULL);
         addBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         addBtn.setText("レイヤー登録");
+        addBtn.setEnabled(false);
         addBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent event) {
@@ -298,9 +349,10 @@ public class Main {
             }
         });
 
-        final Button rmvBtn = new Button(buttonGrp, SWT.NULL);
+        rmvBtn = new Button(buttonGrp, SWT.NULL);
         rmvBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         rmvBtn.setText("レイヤー削除");
+        rmvBtn.setEnabled(false);
         rmvBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -369,6 +421,14 @@ public class Main {
         this.srcCount.setText("0"); //$NON-NLS-1$
         this.srcCount.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 
+        int width = this.ps.getInt(PreferenceConstants.MEM_WIDTH);
+        int height = this.ps.getInt(PreferenceConstants.MEM_HEIGHT);
+        if (width > 0 && height > 0) {
+            shell.setSize(width, height);
+        } else {
+            shell.setSize(MINIMUM_SIZE_WIDTH, MINIMUM_SIZE_HEIGHT);
+            // shell.pack();
+        }
         shell.open();
         try {
             while (!shell.isDisposed()) {
@@ -461,8 +521,9 @@ public class Main {
             List<FunctionConfiguration> list = functionResult.functions();
             List<FunctionConfiguration> sorted = list.stream().sorted(Comparator.comparing(FunctionConfiguration::functionName)).collect(Collectors.toList());
             for (FunctionConfiguration config : sorted) {
-                System.out.println("The function name is " + config.functionName());
-                // function_data = lambda_client.get_function(FunctionName=function_name).get("Configuration")
+                if (config.functionName().toLowerCase().startsWith("contrast-")) {
+                    continue;
+                }
                 LambdaFunction func = new LambdaFunction(config);
                 funcList.add(func);
                 fullAppMap.put(func.getName(), func);

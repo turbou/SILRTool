@@ -24,19 +24,22 @@
 package com.contrastsecurity.silrtool.preference;
 
 public class PreferenceConstants {
-    public static final String LAYER_ARN_PYTHON = new String("com.contrastsecurity.serverlesstool.layer_arn_python"); //$NON-NLS-1$
-    public static final String LAYER_ARN_NODEJS = new String("com.contrastsecurity.serverlesstool.layer_arn_nodejs"); //$NON-NLS-1$
-    public static final String ENV_EXEC_WRAPPER = new String("com.contrastsecurity.serverlesstool.env_exec_wrapper"); //$NON-NLS-1$
-    public static final String ENV_S3_BUCKET = new String("com.contrastsecurity.serverlesstool.env_s3_bucket"); //$NON-NLS-1$
-    public static final String REGION = new String("com.contrastsecurity.serverlesstool.region"); //$NON-NLS-1$
+    public static final String LAYER_ARN_PYTHON = new String("com.contrastsecurity.silrtool.layer_arn_python"); //$NON-NLS-1$
+    public static final String LAYER_ARN_NODEJS = new String("com.contrastsecurity.silrtool.layer_arn_nodejs"); //$NON-NLS-1$
+    public static final String ENV_EXEC_WRAPPER = new String("com.contrastsecurity.silrtool.env_exec_wrapper"); //$NON-NLS-1$
+    public static final String ENV_S3_BUCKET = new String("com.contrastsecurity.silrtool.env_s3_bucket"); //$NON-NLS-1$
+    public static final String REGION = new String("com.contrastsecurity.silrtool.region"); //$NON-NLS-1$
 
-    public static final String PROXY_YUKO = new String("com.contrastsecurity.serverlesstool.proxy_yuko"); //$NON-NLS-1$
-    public static final String PROXY_HOST = new String("com.contrastsecurity.serverlesstool.proxy_host"); //$NON-NLS-1$
-    public static final String PROXY_PORT = new String("com.contrastsecurity.serverlesstool.proxy_port"); //$NON-NLS-1$
-    public static final String PROXY_AUTH = new String("com.contrastsecurity.serverlesstool.proxy_auth"); //$NON-NLS-1$
-    public static final String PROXY_USER = new String("com.contrastsecurity.serverlesstool.proxy_user"); //$NON-NLS-1$
-    public static final String PROXY_PASS = new String("com.contrastsecurity.serverlesstool.proxy_pass"); //$NON-NLS-1$
-    public static final String PROXY_TMP_USER = new String("com.contrastsecurity.serverlesstool.proxy_tmp_user"); //$NON-NLS-1$
-    public static final String PROXY_TMP_PASS = new String("com.contrastsecurity.serverlesstool.proxy_tmp_pass"); //$NON-NLS-1$
-    public static final String IGNORE_SSLCERT_CHECK = new String("com.contrastsecurity.serverlesstool.ignore_sslcert_check"); //$NON-NLS-1$
+    public static final String PROXY_YUKO = new String("com.contrastsecurity.silrtool.proxy_yuko"); //$NON-NLS-1$
+    public static final String PROXY_HOST = new String("com.contrastsecurity.silrtool.proxy_host"); //$NON-NLS-1$
+    public static final String PROXY_PORT = new String("com.contrastsecurity.silrtool.proxy_port"); //$NON-NLS-1$
+    public static final String PROXY_AUTH = new String("com.contrastsecurity.silrtool.proxy_auth"); //$NON-NLS-1$
+    public static final String PROXY_USER = new String("com.contrastsecurity.silrtool.proxy_user"); //$NON-NLS-1$
+    public static final String PROXY_PASS = new String("com.contrastsecurity.silrtool.proxy_pass"); //$NON-NLS-1$
+    public static final String PROXY_TMP_USER = new String("com.contrastsecurity.silrtool.proxy_tmp_user"); //$NON-NLS-1$
+    public static final String PROXY_TMP_PASS = new String("com.contrastsecurity.silrtool.proxy_tmp_pass"); //$NON-NLS-1$
+    public static final String IGNORE_SSLCERT_CHECK = new String("com.contrastsecurity.silrtool.ignore_sslcert_check"); //$NON-NLS-1$
+
+    public static final String MEM_WIDTH = new String("com.contrastsecurity.silrtool.mem_width"); //$NON-NLS-1$
+    public static final String MEM_HEIGHT = new String("com.contrastsecurity.silrtool.mem_height"); //$NON-NLS-1$
 }

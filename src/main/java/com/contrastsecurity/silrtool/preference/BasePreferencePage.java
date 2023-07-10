@@ -167,10 +167,32 @@ public class BasePreferencePage extends PreferencePage {
         descLabelList.add("Contrastサーバレスの設定タブで確認できます。");
         descLabel.setText(String.join("\r\n", descLabelList)); //$NON-NLS-1$
 
-        Button applyBtn = new Button(composite, SWT.NULL);
+        Composite buttonGrp = new Composite(parent, SWT.NONE);
+        GridLayout buttonGrpLt = new GridLayout(2, false);
+        buttonGrpLt.marginHeight = 15;
+        buttonGrpLt.marginWidth = 5;
+        buttonGrpLt.horizontalSpacing = 7;
+        buttonGrpLt.verticalSpacing = 20;
+        buttonGrp.setLayout(buttonGrpLt);
+        GridData buttonGrpGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        buttonGrpGrDt.horizontalAlignment = SWT.END;
+        buttonGrp.setLayoutData(buttonGrpGrDt);
+
+        Button defaultBtn = new Button(buttonGrp, SWT.NULL);
+        GridData defaultBtnGrDt = new GridData(SWT.RIGHT, SWT.BOTTOM, true, true, 1, 1);
+        defaultBtnGrDt.minimumWidth = 100;
+        defaultBtn.setLayoutData(defaultBtnGrDt);
+        defaultBtn.setText(Messages.getString("preferencepage.restoredefaults.button.title")); //$NON-NLS-1$
+        defaultBtn.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                envExecWrapperTxt.setText(ps.getDefaultString(PreferenceConstants.ENV_EXEC_WRAPPER));
+            }
+        });
+
+        Button applyBtn = new Button(buttonGrp, SWT.NULL);
         GridData applyBtnGrDt = new GridData(SWT.RIGHT, SWT.BOTTOM, true, true, 1, 1);
         applyBtnGrDt.minimumWidth = 90;
-        applyBtnGrDt.horizontalSpan = 2;
         applyBtn.setLayoutData(applyBtnGrDt);
         applyBtn.setText(Messages.getString("preferencepage.apply.button.title")); //$NON-NLS-1$
         applyBtn.addSelectionListener(new SelectionAdapter() {
