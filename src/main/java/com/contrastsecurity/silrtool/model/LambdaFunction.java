@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
+import software.amazon.awssdk.services.lambda.model.Layer;
 
 public class LambdaFunction {
     private String name;
     private String runtime;
+    private boolean hasContrastLayer;
     private boolean valid;
     private FunctionConfiguration config;
 
@@ -54,6 +56,28 @@ public class LambdaFunction {
 
     public void setRuntime(String runtime) {
         this.runtime = runtime;
+    }
+
+    public String hasContrastLayerStr() {
+        if (this.hasContrastLayer()) {
+            return "Y";
+        } else {
+            return "N";
+        }
+    }
+
+    public boolean hasContrastLayer() {
+        for (Layer layer : this.config.layers()) {
+            String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
+            if (layerName.startsWith("contrast-instrumentation-extension")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setHasContrastLayer(boolean hasContrastLayer) {
+        this.hasContrastLayer = hasContrastLayer;
     }
 
     public boolean isValid() {

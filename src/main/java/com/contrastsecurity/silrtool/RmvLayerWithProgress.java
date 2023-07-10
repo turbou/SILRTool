@@ -33,10 +33,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.widgets.Shell;
 
+import com.contrastsecurity.silrtool.exception.SILRLambdaException;
 import com.contrastsecurity.silrtool.model.LambdaFunction;
 
 import software.amazon.awssdk.services.lambda.model.Environment;
 import software.amazon.awssdk.services.lambda.model.EnvironmentResponse;
+import software.amazon.awssdk.services.lambda.model.LambdaException;
 import software.amazon.awssdk.services.lambda.model.Layer;
 
 public class RmvLayerWithProgress extends LayerWithProgress {
@@ -49,6 +51,9 @@ public class RmvLayerWithProgress extends LayerWithProgress {
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
         monitor.beginTask("レイヤー削除", this.orgs.size());
         for (LambdaFunction func : this.orgs) {
+            if (monitor.isCanceled()) {
+                throw new InterruptedException("キャンセルされました。");
+            }
             monitor.setTaskName(func.getName());
             EnvironmentResponse envRes = func.getConfig().environment();
             Map<String, String> valueMap = envRes.variables();
@@ -69,10 +74,22 @@ public class RmvLayerWithProgress extends LayerWithProgress {
                     layerArns.add(layer.arn());
                 }
             }
-            updateFunctionConfiguration(func.getName(), environment, layerArns);
+            try {
+                updateFunctionConfiguration(func.getName(), environment, layerArns);
+            } catch (LambdaException e) {
+                throw new InvocationTargetException(new SILRLambdaException(func.getName(), e));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             monitor.worked(1);
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
+//        shell.getDisplay().syncExec(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((ServerLessToolShell) shell).getMain().listFunctions();
+//            }
+//        });
         monitor.done();
     }
 }

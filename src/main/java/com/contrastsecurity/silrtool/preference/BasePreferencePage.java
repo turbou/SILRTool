@@ -55,8 +55,8 @@ public class BasePreferencePage extends PreferencePage {
 
     private ServerLessToolShell shell;
     private Combo regionCombo;
-    private Text connectionTimeoutTxt;
-    private Text socketTimeoutTxt;
+    private Text layerArnPythonTxt;
+    private Text layerArnNodeJSTxt;
     private Text envExecWrapperTxt;
     private Text envS3BucketTxt;
 
@@ -109,23 +109,23 @@ public class BasePreferencePage extends PreferencePage {
 
         // ========== Python ========== //
         new Label(timeoutGrp, SWT.LEFT).setText("Python:");
-        connectionTimeoutTxt = new Text(timeoutGrp, SWT.BORDER);
-        connectionTimeoutTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        connectionTimeoutTxt.setText(ps.getString(PreferenceConstants.LAYER_ARN_PYTHON));
-        connectionTimeoutTxt.addListener(SWT.FocusIn, new Listener() {
+        layerArnPythonTxt = new Text(timeoutGrp, SWT.BORDER);
+        layerArnPythonTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        layerArnPythonTxt.setText(ps.getString(PreferenceConstants.LAYER_ARN_PYTHON));
+        layerArnPythonTxt.addListener(SWT.FocusIn, new Listener() {
             public void handleEvent(Event e) {
-                connectionTimeoutTxt.selectAll();
+                layerArnPythonTxt.selectAll();
             }
         });
 
         // ========== NodeJS ========== //
         new Label(timeoutGrp, SWT.LEFT).setText("NodeJS:");
-        socketTimeoutTxt = new Text(timeoutGrp, SWT.BORDER);
-        socketTimeoutTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        socketTimeoutTxt.setText(ps.getString(PreferenceConstants.LAYER_ARN_NODEJS));
-        socketTimeoutTxt.addListener(SWT.FocusIn, new Listener() {
+        layerArnNodeJSTxt = new Text(timeoutGrp, SWT.BORDER);
+        layerArnNodeJSTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        layerArnNodeJSTxt.setText(ps.getString(PreferenceConstants.LAYER_ARN_NODEJS));
+        layerArnNodeJSTxt.addListener(SWT.FocusIn, new Listener() {
             public void handleEvent(Event e) {
-                socketTimeoutTxt.selectAll();
+                layerArnNodeJSTxt.selectAll();
             }
         });
 
@@ -219,26 +219,32 @@ public class BasePreferencePage extends PreferencePage {
             ps.setValue(PreferenceConstants.REGION, this.regionCombo.getText());
         }
 
-        if (this.connectionTimeoutTxt.getText().isEmpty()) {
-            errors.add(Messages.getString("connectionpreferencepage.message.dialog.connection.timeout.empty.error.message")); //$NON-NLS-1$
+        if (this.layerArnPythonTxt.getText().isEmpty()) {
+            errors.add("・PythonのテレメトリーレイヤのARNが設定されていません。");
         } else {
-            ps.setValue(PreferenceConstants.LAYER_ARN_PYTHON, this.connectionTimeoutTxt.getText());
+//            if (!this.layerArnPythonTxt.getText().trim().startsWith("arn:aws:lambda:")) {
+//                errors.add("・LambdaのARNではないようです。");
+//            }
+            ps.setValue(PreferenceConstants.LAYER_ARN_PYTHON, this.layerArnPythonTxt.getText());
         }
 
-        if (this.socketTimeoutTxt.getText().isEmpty()) {
-            errors.add(Messages.getString("connectionpreferencepage.message.dialog.socket.timeout.empty.error.message")); //$NON-NLS-1$
+        if (this.layerArnNodeJSTxt.getText().isEmpty()) {
+            errors.add("・NodeJSのテレメトリーレイヤのARNが設定されていません。");
         } else {
-            ps.setValue(PreferenceConstants.LAYER_ARN_NODEJS, this.socketTimeoutTxt.getText());
+//            if (!this.layerArnNodeJSTxt.getText().trim().startsWith("arn:aws:lambda:")) {
+//                errors.add("・LambdaのARNではないようです。");
+//            }
+            ps.setValue(PreferenceConstants.LAYER_ARN_NODEJS, this.layerArnNodeJSTxt.getText());
         }
 
         if (this.envExecWrapperTxt.getText().isEmpty()) {
-            errors.add(Messages.getString("connectionpreferencepage.message.dialog.connection.timeout.empty.error.message")); //$NON-NLS-1$
+            errors.add("・AWS_LAMBDA_EXEC_WRAPPERの値が設定されていません。");
         } else {
             ps.setValue(PreferenceConstants.ENV_EXEC_WRAPPER, this.envExecWrapperTxt.getText());
         }
 
         if (this.envS3BucketTxt.getText().isEmpty()) {
-            errors.add(Messages.getString("connectionpreferencepage.message.dialog.socket.timeout.empty.error.message")); //$NON-NLS-1$
+            errors.add("・CONTRAST_BUCKETの値が設定されていません。");
         } else {
             ps.setValue(PreferenceConstants.ENV_S3_BUCKET, this.envS3BucketTxt.getText());
         }

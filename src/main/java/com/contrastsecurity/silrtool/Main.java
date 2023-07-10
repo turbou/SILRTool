@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.exec.OS;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.contrastsecurity.silrtool.exception.SILRLambdaException;
 import com.contrastsecurity.silrtool.model.LambdaFunction;
 import com.contrastsecurity.silrtool.preference.AboutPage;
 import com.contrastsecurity.silrtool.preference.BasePreferencePage;
@@ -53,12 +55,9 @@ import com.contrastsecurity.silrtool.preference.PreferenceConstants;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
-import software.amazon.awssdk.services.lambda.model.Environment;
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
 import software.amazon.awssdk.services.lambda.model.LambdaException;
 import software.amazon.awssdk.services.lambda.model.ListFunctionsResponse;
-import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationRequest;
-import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
 
 public class Main {
 
@@ -165,6 +164,7 @@ public class Main {
 
             @Override
             public void shellActivated(ShellEvent event) {
+                System.out.println("shellActivated");
                 boolean ngRequiredFields = false;
                 String layerArnPython = ps.getString(PreferenceConstants.LAYER_ARN_PYTHON);
                 String layerArnNodeJS = ps.getString(PreferenceConstants.LAYER_ARN_NODEJS);
@@ -253,11 +253,14 @@ public class Main {
         column1.setWidth(50);
         column1.setText("");
         TableColumn column2 = new TableColumn(table, SWT.LEFT);
-        column2.setWidth(360);
+        column2.setWidth(300);
         column2.setText("関数名");
         TableColumn column3 = new TableColumn(table, SWT.LEFT);
-        column3.setWidth(150);
+        column3.setWidth(120);
         column3.setText("ランタイム");
+        TableColumn column4 = new TableColumn(table, SWT.CENTER);
+        column4.setWidth(60);
+        column4.setText("Contrast");
 
         Composite buttonGrp = new Composite(orgTableGrp, SWT.NONE);
         GridData buttonGrpGrDt = new GridData(GridData.FILL_VERTICAL);
@@ -315,8 +318,13 @@ public class Main {
                 ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー登録");
                 try {
                     progDialog.run(true, true, progress);
-                } catch (InvocationTargetException | InterruptedException e1) {
-                    e1.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    if (e.getTargetException() instanceof SILRLambdaException) {
+                        SILRLambdaException sle = (SILRLambdaException) e.getTargetException();
+                        MessageDialog.openError(shell, sle.getFuncName(), sle.getMessage());
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -327,7 +335,7 @@ public class Main {
         rmvBtn.setEnabled(false);
         rmvBtn.addSelectionListener(new SelectionAdapter() {
             @Override
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(SelectionEvent event) {
                 List<LambdaFunction> targetFuncs = new ArrayList<LambdaFunction>();
                 for (Button chkBtn : checkBoxList) {
                     if (chkBtn.getSelection()) {
@@ -338,8 +346,13 @@ public class Main {
                 ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー削除");
                 try {
                     progDialog.run(true, true, progress);
-                } catch (InvocationTargetException | InterruptedException e2) {
-                    e2.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    if (e.getTargetException() instanceof SILRLambdaException) {
+                        SILRLambdaException sle = (SILRLambdaException) e.getTargetException();
+                        MessageDialog.openError(shell, sle.getFuncName(), sle.getMessage());
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -459,6 +472,7 @@ public class Main {
         checkBoxList.add(button);
         item.setText(2, org.getName());
         item.setText(3, org.getRuntime());
+        item.setText(4, org.hasContrastLayerStr());
     }
 
     public void listFunctions() {
@@ -492,7 +506,6 @@ public class Main {
             srcCount.setText(String.valueOf(funcList.size()));
         } catch (LambdaException e) {
             System.err.println(e.getMessage());
-            System.exit(1);
         }
     }
 

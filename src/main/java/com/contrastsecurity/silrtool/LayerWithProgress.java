@@ -36,7 +36,6 @@ import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.model.Environment;
-import software.amazon.awssdk.services.lambda.model.LambdaException;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationRequest;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
 
@@ -52,22 +51,12 @@ public abstract class LayerWithProgress implements IRunnableWithProgress {
         this.orgs = orgs;
     }
 
-    protected void updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) {
-        try {
-            Region region = Region.of(ps.getString(PreferenceConstants.REGION));
-            LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
-            UpdateFunctionConfigurationRequest configurationRequest = UpdateFunctionConfigurationRequest.builder().functionName(functionName).environment(environment)
-                    .layers(layers).build();
-            UpdateFunctionConfigurationResponse response = awsLambda.updateFunctionConfiguration(configurationRequest);
-            System.out.println(response);
-            awsLambda.close();
-        } catch (LambdaException le) {
-            le.printStackTrace();
-            System.err.println(le.getMessage());
-            System.exit(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    protected void updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) throws Exception {
+        Region region = Region.of(ps.getString(PreferenceConstants.REGION));
+        LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
+        UpdateFunctionConfigurationRequest configurationRequest = UpdateFunctionConfigurationRequest.builder().functionName(functionName).environment(environment).layers(layers)
+                .build();
+        UpdateFunctionConfigurationResponse response = awsLambda.updateFunctionConfiguration(configurationRequest);
+        awsLambda.close();
     }
-
 }

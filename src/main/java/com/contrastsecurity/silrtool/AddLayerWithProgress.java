@@ -33,11 +33,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.widgets.Shell;
 
+import com.contrastsecurity.silrtool.exception.SILRLambdaException;
 import com.contrastsecurity.silrtool.model.LambdaFunction;
 import com.contrastsecurity.silrtool.preference.PreferenceConstants;
 
 import software.amazon.awssdk.services.lambda.model.Environment;
 import software.amazon.awssdk.services.lambda.model.EnvironmentResponse;
+import software.amazon.awssdk.services.lambda.model.LambdaException;
 import software.amazon.awssdk.services.lambda.model.Layer;
 
 public class AddLayerWithProgress extends LayerWithProgress {
@@ -50,6 +52,9 @@ public class AddLayerWithProgress extends LayerWithProgress {
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
         monitor.beginTask("レイヤー登録", this.orgs.size()); //$NON-NLS-1$
         for (LambdaFunction func : this.orgs) {
+            if (monitor.isCanceled()) {
+                throw new InterruptedException("キャンセルされました。");
+            }
             monitor.setTaskName(func.getName());
             // SubProgressMonitor sub1Monitor = new SubProgressMonitor(monitor, 100);
             EnvironmentResponse envRes = func.getConfig().environment();
@@ -84,10 +89,22 @@ public class AddLayerWithProgress extends LayerWithProgress {
             } else {
                 System.out.println(String.format("Layer not found for runtime %s", func.getRuntime()));
             }
-            updateFunctionConfiguration(func.getName(), environment, layerArns);
+            try {
+                updateFunctionConfiguration(func.getName(), environment, layerArns);
+            } catch (LambdaException e) {
+                throw new InvocationTargetException(new SILRLambdaException(func.getName(), e));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             monitor.worked(1);
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
+//        shell.getDisplay().syncExec(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((ServerLessToolShell) shell).getMain().listFunctions();
+//            }
+//        });
         monitor.done();
     }
 }
