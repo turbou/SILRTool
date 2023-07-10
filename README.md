@@ -1,4 +1,5 @@
 # ServerlessTool
+現在まだプロトです。
 
 ### 前提条件
 aws configureで、AWS Cliを使うための設定を済ませておいてください。
@@ -18,5 +19,7 @@ compile group: 'org.eclipse.swt', name: 'org.eclipse.swt.win32.win32.x86_64', ve
 
 あとはEclipseでプロジェクトをリフレッシュして実行してください。  
 メインクラスは```mori.Main```を選んでください。
+
+あとで、exeで実行できるバイナリなども用意していきます。
 
 以上
