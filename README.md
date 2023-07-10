@@ -1,5 +1,8 @@
 # ServerlessTool
 
+### 前提条件
+aws configureで、AWS Cliを使うための設定を済ませておいてください。
+
 ### Eclipseでの起動の仕方
 今のbuild.gradleはMacでそのまま動くようになっています。  
 java -versionでjdk1.8であることを確認してください。  
