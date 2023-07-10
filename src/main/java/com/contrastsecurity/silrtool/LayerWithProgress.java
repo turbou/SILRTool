@@ -51,12 +51,13 @@ public abstract class LayerWithProgress implements IRunnableWithProgress {
         this.orgs = orgs;
     }
 
-    protected void updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) throws Exception {
+    protected UpdateFunctionConfigurationResponse updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) throws Exception {
         Region region = Region.of(ps.getString(PreferenceConstants.REGION));
         LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
         UpdateFunctionConfigurationRequest configurationRequest = UpdateFunctionConfigurationRequest.builder().functionName(functionName).environment(environment).layers(layers)
                 .build();
         UpdateFunctionConfigurationResponse response = awsLambda.updateFunctionConfiguration(configurationRequest);
         awsLambda.close();
+        return response;
     }
 }

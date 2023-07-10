@@ -41,6 +41,7 @@ import software.amazon.awssdk.services.lambda.model.Environment;
 import software.amazon.awssdk.services.lambda.model.EnvironmentResponse;
 import software.amazon.awssdk.services.lambda.model.LambdaException;
 import software.amazon.awssdk.services.lambda.model.Layer;
+import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
 
 public class AddLayerWithProgress extends LayerWithProgress {
 
@@ -90,7 +91,14 @@ public class AddLayerWithProgress extends LayerWithProgress {
                 System.out.println(String.format("Layer not found for runtime %s", func.getRuntime()));
             }
             try {
-                updateFunctionConfiguration(func.getName(), environment, layerArns);
+                UpdateFunctionConfigurationResponse response = updateFunctionConfiguration(func.getName(), environment, layerArns);
+                func.setResponse(response);
+                shell.getDisplay().syncExec(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ServerLessToolShell) shell).getMain().updateTableItem(func);
+                    }
+                });
             } catch (LambdaException e) {
                 throw new InvocationTargetException(new SILRLambdaException(func.getName(), e));
             } catch (Exception e) {
@@ -99,12 +107,6 @@ public class AddLayerWithProgress extends LayerWithProgress {
             monitor.worked(1);
             Thread.sleep(500);
         }
-//        shell.getDisplay().syncExec(new Runnable() {
-//            @Override
-//            public void run() {
-//                ((ServerLessToolShell) shell).getMain().listFunctions();
-//            }
-//        });
         monitor.done();
     }
 }

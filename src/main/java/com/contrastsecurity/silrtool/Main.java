@@ -164,7 +164,6 @@ public class Main {
 
             @Override
             public void shellActivated(ShellEvent event) {
-                System.out.println("shellActivated");
                 boolean ngRequiredFields = false;
                 String layerArnPython = ps.getString(PreferenceConstants.LAYER_ARN_PYTHON);
                 String layerArnNodeJS = ps.getString(PreferenceConstants.LAYER_ARN_NODEJS);
@@ -445,6 +444,12 @@ public class Main {
             addFuncToTable(func);
         }
         srcCount.setText(String.valueOf(funcList.size()));
+    }
+
+    public void updateTableItem(LambdaFunction func) {
+        int index = funcList.indexOf(func);
+        TableItem item = table.getItem(index);
+        item.setText(4, func.hasContrastLayerStr());
     }
 
     private void addFuncToTable(LambdaFunction org) {

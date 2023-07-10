@@ -28,6 +28,7 @@ import java.util.List;
 
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
 import software.amazon.awssdk.services.lambda.model.Layer;
+import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
 
 public class LambdaFunction {
     private String name;
@@ -35,6 +36,7 @@ public class LambdaFunction {
     private boolean hasContrastLayer;
     private boolean valid;
     private FunctionConfiguration config;
+    private UpdateFunctionConfigurationResponse response;
 
     public LambdaFunction(FunctionConfiguration config) {
         this.name = config.functionName();
@@ -67,10 +69,19 @@ public class LambdaFunction {
     }
 
     public boolean hasContrastLayer() {
-        for (Layer layer : this.config.layers()) {
-            String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-            if (layerName.startsWith("contrast-instrumentation-extension")) {
-                return true;
+        if (this.response != null) {
+            for (Layer layer : this.response.layers()) {
+                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
+                if (layerName.startsWith("contrast-instrumentation-extension")) {
+                    return true;
+                }
+            }
+        } else {
+            for (Layer layer : this.config.layers()) {
+                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
+                if (layerName.startsWith("contrast-instrumentation-extension")) {
+                    return true;
+                }
             }
         }
         return false;
@@ -94,6 +105,14 @@ public class LambdaFunction {
 
     public void setConfig(FunctionConfiguration config) {
         this.config = config;
+    }
+
+    public UpdateFunctionConfigurationResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(UpdateFunctionConfigurationResponse response) {
+        this.response = response;
     }
 
     @Override
