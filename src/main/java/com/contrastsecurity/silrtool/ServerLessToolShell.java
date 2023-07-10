@@ -21,7 +21,7 @@
  * 
  */
 
-package mori;
+package com.contrastsecurity.silrtool;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;

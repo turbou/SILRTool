@@ -1,4 +1,4 @@
-package mori.preference;
+package com.contrastsecurity.silrtool.preference;
 
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -8,7 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-import mori.Messages;
+import com.contrastsecurity.silrtool.Messages;
 
 public class MyPreferenceDialog extends PreferenceDialog {
 

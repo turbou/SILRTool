@@ -21,7 +21,7 @@
  * 
  */
 
-package mori.preference;
+package com.contrastsecurity.silrtool.preference;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,8 +46,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import mori.Messages;
-import mori.ServerLessToolShell;
+import com.contrastsecurity.silrtool.Messages;
+import com.contrastsecurity.silrtool.ServerLessToolShell;
+
 import software.amazon.awssdk.regions.Region;
 
 public class BasePreferencePage extends PreferencePage {

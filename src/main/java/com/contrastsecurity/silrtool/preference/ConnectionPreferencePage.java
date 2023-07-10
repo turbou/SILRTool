@@ -21,7 +21,7 @@
  * 
  */
 
-package mori.preference;
+package com.contrastsecurity.silrtool.preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +47,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.jasypt.util.text.BasicTextEncryptor;
 
-import mori.Main;
-import mori.Messages;
+import com.contrastsecurity.silrtool.Main;
+import com.contrastsecurity.silrtool.Messages;
 
 public class ConnectionPreferencePage extends PreferencePage {
 

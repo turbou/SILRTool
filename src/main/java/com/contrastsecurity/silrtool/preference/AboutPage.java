@@ -21,7 +21,7 @@
  * 
  */
 
-package mori.preference;
+package com.contrastsecurity.silrtool.preference;
 
 import java.awt.Desktop;
 import java.net.URI;
@@ -37,8 +37,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 
-import mori.Main;
-import mori.Messages;
+import com.contrastsecurity.silrtool.Main;
+import com.contrastsecurity.silrtool.Messages;
 
 public class AboutPage extends PreferencePage {
 
@@ -54,18 +54,29 @@ public class AboutPage extends PreferencePage {
         parent.setLayout(parentGrLt);
 
         Composite appGrp = new Composite(parent, SWT.NONE);
-        appGrp.setLayout(new GridLayout(3, false));
+        appGrp.setLayout(new GridLayout(2, false));
         GridData appGrpGrDt = new GridData(GridData.FILL_HORIZONTAL);
         appGrp.setLayoutData(appGrpGrDt);
 
         Label icon = new Label(appGrp, SWT.NONE);
         GridData iconGrDt = new GridData();
-        iconGrDt.horizontalSpan = 3;
+        iconGrDt.horizontalSpan = 2;
         iconGrDt.minimumHeight = 80;
         iconGrDt.minimumWidth = 300;
         icon.setLayoutData(iconGrDt);
         Image iconImg = new Image(parent.getDisplay(), Main.class.getClassLoader().getResourceAsStream("banner.png")); //$NON-NLS-1$
         icon.setImage(iconImg);
+
+        Label fullAppNameTitleLbl = new Label(appGrp, SWT.NONE);
+        GridData fullAppNameTitleLblGrDt = new GridData();
+        fullAppNameTitleLblGrDt.minimumHeight = 100;
+        fullAppNameTitleLbl.setLayoutData(fullAppNameTitleLblGrDt);
+        fullAppNameTitleLbl.setText("SILRTool:"); //$NON-NLS-1$
+        Label fullAppNameLbl = new Label(appGrp, SWT.NONE);
+        GridData fullAppNameLblGrDt = new GridData();
+        fullAppNameLblGrDt.minimumHeight = 100;
+        fullAppNameLbl.setLayoutData(fullAppNameLblGrDt);
+        fullAppNameLbl.setText("Serverless Instrumentation Layers Registration Tool"); //$NON-NLS-1$
 
         Label versionTitleLbl = new Label(appGrp, SWT.NONE);
         GridData versionTitleLblGrDt = new GridData();

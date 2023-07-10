@@ -1,4 +1,4 @@
-package mori;
+package com.contrastsecurity.silrtool;
 
 import java.util.Locale;
 import java.util.MissingResourceException;

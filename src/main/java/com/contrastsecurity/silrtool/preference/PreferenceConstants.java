@@ -21,7 +21,7 @@
  * 
  */
 
-package mori.preference;
+package com.contrastsecurity.silrtool.preference;
 
 public class PreferenceConstants {
     public static final String LAYER_ARN_PYTHON = new String("com.contrastsecurity.serverlesstool.layer_arn_python"); //$NON-NLS-1$

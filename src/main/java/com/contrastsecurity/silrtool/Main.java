@@ -1,4 +1,4 @@
-package mori;
+package com.contrastsecurity.silrtool;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.preference.PreferenceStore;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
@@ -24,6 +25,9 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -36,11 +40,13 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import mori.preference.AboutPage;
-import mori.preference.BasePreferencePage;
-import mori.preference.ConnectionPreferencePage;
-import mori.preference.MyPreferenceDialog;
-import mori.preference.PreferenceConstants;
+import com.contrastsecurity.silrtool.model.LambdaFunction;
+import com.contrastsecurity.silrtool.preference.AboutPage;
+import com.contrastsecurity.silrtool.preference.BasePreferencePage;
+import com.contrastsecurity.silrtool.preference.ConnectionPreferencePage;
+import com.contrastsecurity.silrtool.preference.MyPreferenceDialog;
+import com.contrastsecurity.silrtool.preference.PreferenceConstants;
+
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -56,6 +62,7 @@ import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationR
 public class Main {
 
     private ServerLessToolShell shell;
+    public static final String WINDOW_TITLE = "SILRTool"; //$NON-NLS-1$
     public static final int MINIMUM_SIZE_WIDTH = 720;
     public static final int MINIMUM_SIZE_WIDTH_MAC = 720;
     public static final int MINIMUM_SIZE_HEIGHT = 670;
@@ -119,6 +126,15 @@ public class Main {
         } else {
             shell.setMinimumSize(MINIMUM_SIZE_WIDTH, MINIMUM_SIZE_HEIGHT);
         }
+        Image[] imageArray = new Image[5];
+        imageArray[0] = new Image(display, Main.class.getClassLoader().getResourceAsStream("icon16.png")); //$NON-NLS-1$
+        imageArray[1] = new Image(display, Main.class.getClassLoader().getResourceAsStream("icon24.png")); //$NON-NLS-1$
+        imageArray[2] = new Image(display, Main.class.getClassLoader().getResourceAsStream("icon32.png")); //$NON-NLS-1$
+        imageArray[3] = new Image(display, Main.class.getClassLoader().getResourceAsStream("icon48.png")); //$NON-NLS-1$
+        imageArray[4] = new Image(display, Main.class.getClassLoader().getResourceAsStream("icon128.png")); //$NON-NLS-1$
+        shell.setImages(imageArray);
+        Window.setDefaultImages(imageArray);
+        setWindowTitle();
         fullAppMap = new TreeMap<String, LambdaFunction>();
         funcList = new ArrayList<LambdaFunction>();
 
@@ -133,20 +149,23 @@ public class Main {
         GridData appListGrpGrDt = new GridData(GridData.FILL_BOTH);
         assessShell.setLayoutData(appListGrpGrDt);
 
+        Font bigFont = new Font(display, "Arial", 20, SWT.NORMAL);
         appLoadBtn = new Button(assessShell, SWT.PUSH);
+        GC gc = new GC(appLoadBtn);
+        gc.setFont(bigFont);
+        Point bigBtnSize = gc.textExtent(Messages.getString("main.vul.export.button.title"));
+        gc.dispose();
         GridData appLoadBtnGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        appLoadBtnGrDt.minimumHeight = 50;
+        appLoadBtnGrDt.heightHint = bigBtnSize.y + 20;
         appLoadBtnGrDt.horizontalSpan = 3;
         appLoadBtn.setLayoutData(appLoadBtnGrDt);
-        appLoadBtn.setText("Load Function");
+        appLoadBtn.setText("関数の読み込み");
+        appLoadBtn.setFont(new Font(display, "Arial", 20, SWT.NORMAL)); //$NON-NLS-1$
         appLoadBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Region region = Region.of(ps.getString(PreferenceConstants.REGION));
-                LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
-                System.out.println("start");
-                listFunctions(awsLambda);
-                System.out.println("end");
-                awsLambda.close();
+                listFunctions();
             }
         });
 
@@ -274,9 +293,7 @@ public class Main {
                     } else {
                         System.out.println(String.format("Layer not found for runtime %s", func.getRuntime()));
                     }
-                    Region region = Region.of(ps.getString(PreferenceConstants.REGION));
-                    LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
-                    updateFunctionConfiguration(awsLambda, func.getName(), environment, layerArns);
+                    updateFunctionConfiguration(func.getName(), environment, layerArns);
                 }
             }
         });
@@ -313,10 +330,7 @@ public class Main {
                             layerArns.add(layer.arn());
                         }
                     }
-
-                    Region region = Region.of(ps.getString(PreferenceConstants.REGION));
-                    LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
-                    updateFunctionConfiguration(awsLambda, func.getName(), environment, layerArns);
+                    updateFunctionConfiguration(func.getName(), environment, layerArns);
                 }
             }
         });
@@ -430,7 +444,7 @@ public class Main {
         item.setText(3, org.getRuntime());
     }
 
-    public void listFunctions(LambdaClient awsLambda) {
+    public void listFunctions() {
         srcListFilter.setText("");
         for (Button button : checkBoxList) {
             button.dispose();
@@ -441,6 +455,8 @@ public class Main {
         fullAppMap.clear();
         funcList.clear();
         try {
+            Region region = Region.of(ps.getString(PreferenceConstants.REGION));
+            LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
             ListFunctionsResponse functionResult = awsLambda.listFunctions();
             List<FunctionConfiguration> list = functionResult.functions();
             List<FunctionConfiguration> sorted = list.stream().sorted(Comparator.comparing(FunctionConfiguration::functionName)).collect(Collectors.toList());
@@ -451,6 +467,7 @@ public class Main {
                 funcList.add(func);
                 fullAppMap.put(func.getName(), func);
             }
+            awsLambda.close();
             for (LambdaFunction func : funcList) {
                 addFuncToTable(func);
             }
@@ -461,12 +478,15 @@ public class Main {
         }
     }
 
-    private void updateFunctionConfiguration(LambdaClient awsLambda, String functionName, Environment environment, List<String> layers) {
+    private void updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) {
         try {
+            Region region = Region.of(ps.getString(PreferenceConstants.REGION));
+            LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
             UpdateFunctionConfigurationRequest configurationRequest = UpdateFunctionConfigurationRequest.builder().functionName(functionName).environment(environment)
                     .layers(layers).build();
             UpdateFunctionConfigurationResponse response = awsLambda.updateFunctionConfiguration(configurationRequest);
             System.out.println(response);
+            awsLambda.close();
         } catch (LambdaException le) {
             le.printStackTrace();
             System.err.println(le.getMessage());
@@ -474,5 +494,9 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setWindowTitle() {
+        this.shell.setText(String.format(WINDOW_TITLE));
     }
 }
