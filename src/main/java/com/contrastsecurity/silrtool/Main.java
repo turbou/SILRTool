@@ -60,7 +60,6 @@ import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
-import software.amazon.awssdk.services.lambda.model.LambdaException;
 import software.amazon.awssdk.services.lambda.model.ListFunctionsResponse;
 
 public class Main {
@@ -242,7 +241,7 @@ public class Main {
         });
         new Label(funcTableGrp, SWT.LEFT).setText(""); //$NON-NLS-1$
 
-        table = new Table(funcTableGrp, SWT.BORDER);
+        table = new Table(funcTableGrp, SWT.BORDER | SWT.FULL_SELECTION);
         GridData tableGrDt = new GridData(GridData.FILL_BOTH);
         table.setLayoutData(tableGrDt);
         table.setLinesVisible(true);
@@ -542,8 +541,8 @@ public class Main {
                 addFuncToTable(func);
             }
             funcCount.setText(String.valueOf(funcList.size()));
-        } catch (LambdaException e) {
-            System.err.println(e.getMessage());
+        } catch (Exception e) {
+            MessageDialog.openError(shell, "関数の読み込み", e.getMessage());
         }
     }
 
