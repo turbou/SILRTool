@@ -1,8 +1,14 @@
-# ServerlessTool
-現在まだプロトです。
+# SILRTool
+*Serverless Instrumentation Layers Registration Tool*  
+
+### 現在まだプロトです。
 
 ### 前提条件
-aws configureで、AWS Cliを使うための設定を済ませておいてください。
+```aws configure```または手動にてAWSのプロファイル（以下のファイル）を作成しておいてください。    
+- ~/.aws/config
+- ~/.aws/credentials
+
+**AWS Cliのインストールは任意となります。**
 
 ### Eclipseでの起動の仕方
 今のbuild.gradleはMacでそのまま動くようになっています。  
