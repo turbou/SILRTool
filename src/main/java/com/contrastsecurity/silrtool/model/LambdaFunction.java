@@ -26,6 +26,7 @@ package com.contrastsecurity.silrtool.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import software.amazon.awssdk.services.lambda.model.EnvironmentResponse;
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
 import software.amazon.awssdk.services.lambda.model.Layer;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
@@ -33,7 +34,6 @@ import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationR
 public class LambdaFunction {
     private String name;
     private String runtime;
-    private boolean hasContrastLayer;
     private boolean valid;
     private FunctionConfiguration config;
     private UpdateFunctionConfigurationResponse response;
@@ -87,16 +87,28 @@ public class LambdaFunction {
         return false;
     }
 
-    public void setHasContrastLayer(boolean hasContrastLayer) {
-        this.hasContrastLayer = hasContrastLayer;
-    }
-
     public boolean isValid() {
         return valid;
     }
 
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    public List<Layer> getLatestLayers() {
+        if (this.response != null) {
+            return this.response.layers();
+        } else {
+            return this.config.layers();
+        }
+    }
+
+    public EnvironmentResponse getLatestEnvironment() {
+        if (this.response != null) {
+            return this.response.environment();
+        } else {
+            return this.config.environment();
+        }
     }
 
     public FunctionConfiguration getConfig() {

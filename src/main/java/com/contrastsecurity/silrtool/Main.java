@@ -37,8 +37,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -240,11 +244,37 @@ public class Main {
         });
         new Label(orgTableGrp, SWT.LEFT).setText(""); //$NON-NLS-1$
 
-        table = new Table(orgTableGrp, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+        table = new Table(orgTableGrp, SWT.BORDER);
         GridData tableGrDt = new GridData(GridData.FILL_BOTH);
         table.setLayoutData(tableGrDt);
         table.setLinesVisible(true);
         table.setHeaderVisible(true);
+
+        table.addListener(SWT.MouseDoubleClick, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                int index = table.getSelectionIndex();
+                LambdaFunction func = funcList.get(index);
+                LambdaFunctionDetailDialog filterDialog = new LambdaFunctionDetailDialog(shell, func);
+                filterDialog.open();
+            }
+        });
+
+        Menu menuTable = new Menu(table);
+        table.setMenu(menuTable);
+
+        MenuItem miTag = new MenuItem(menuTable, SWT.NONE);
+        miTag.setText("詳細を見る");
+        miTag.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                int index = table.getSelectionIndex();
+                LambdaFunction func = funcList.get(index);
+                LambdaFunctionDetailDialog filterDialog = new LambdaFunctionDetailDialog(shell, func);
+                filterDialog.open();
+            }
+        });
+
         TableColumn column0 = new TableColumn(table, SWT.NONE);
         column0.setWidth(0);
         column0.setResizable(false);
