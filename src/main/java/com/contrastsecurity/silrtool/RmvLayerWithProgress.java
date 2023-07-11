@@ -44,14 +44,14 @@ import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationR
 
 public class RmvLayerWithProgress extends LayerWithProgress {
 
-    public RmvLayerWithProgress(Shell shell, PreferenceStore ps, List<LambdaFunction> orgs) {
-        super(shell, ps, orgs);
+    public RmvLayerWithProgress(Shell shell, PreferenceStore ps, List<LambdaFunction> funcs) {
+        super(shell, ps, funcs);
     }
 
     @Override
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-        monitor.beginTask("レイヤー削除", this.orgs.size());
-        for (LambdaFunction func : this.orgs) {
+        monitor.beginTask("レイヤー削除", this.funcs.size());
+        for (LambdaFunction func : this.funcs) {
             if (monitor.isCanceled()) {
                 throw new InterruptedException("キャンセルされました。");
             }

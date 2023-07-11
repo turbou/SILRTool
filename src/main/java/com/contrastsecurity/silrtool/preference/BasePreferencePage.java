@@ -129,18 +129,18 @@ public class BasePreferencePage extends PreferencePage {
             }
         });
 
-        Group environmentGrp = new Group(composite, SWT.NONE);
-        GridLayout environmentGrpGrpLt = new GridLayout(2, false);
-        environmentGrpGrpLt.marginWidth = 15;
-        environmentGrpGrpLt.horizontalSpacing = 10;
-        environmentGrp.setLayout(environmentGrpGrpLt);
-        GridData environmentGrpGrDt = new GridData(GridData.FILL_HORIZONTAL);
-        environmentGrp.setLayoutData(environmentGrpGrDt);
-        environmentGrp.setText("環境変数");
+        Group envGrp = new Group(composite, SWT.NONE);
+        GridLayout envGrpGrpLt = new GridLayout(2, false);
+        envGrpGrpLt.marginWidth = 15;
+        envGrpGrpLt.horizontalSpacing = 10;
+        envGrp.setLayout(envGrpGrpLt);
+        GridData envGrpGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        envGrp.setLayoutData(envGrpGrDt);
+        envGrp.setText("環境変数");
 
         // ========== AWS_LAMBDA_EXEC_WRAPPER ========== //
-        new Label(environmentGrp, SWT.LEFT).setText("AWS_LAMBDA_EXEC_WRAPPER:");
-        envExecWrapperTxt = new Text(environmentGrp, SWT.BORDER);
+        new Label(envGrp, SWT.LEFT).setText("AWS_LAMBDA_EXEC_WRAPPER:");
+        envExecWrapperTxt = new Text(envGrp, SWT.BORDER);
         envExecWrapperTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         envExecWrapperTxt.setText(ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER));
         envExecWrapperTxt.addListener(SWT.FocusIn, new Listener() {
@@ -150,8 +150,8 @@ public class BasePreferencePage extends PreferencePage {
         });
 
         // ========== CONTRAST_BUCKET ========== //
-        new Label(environmentGrp, SWT.LEFT).setText("CONTRAST_BUCKET:");
-        envS3BucketTxt = new Text(environmentGrp, SWT.BORDER);
+        new Label(envGrp, SWT.LEFT).setText("CONTRAST_BUCKET:");
+        envS3BucketTxt = new Text(envGrp, SWT.BORDER);
         envS3BucketTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         envS3BucketTxt.setText(ps.getString(PreferenceConstants.ENV_S3_BUCKET));
         envS3BucketTxt.addListener(SWT.FocusIn, new Listener() {

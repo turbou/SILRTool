@@ -43,12 +43,12 @@ public abstract class LayerWithProgress implements IRunnableWithProgress {
 
     protected PreferenceStore ps;
     protected Shell shell;
-    protected List<LambdaFunction> orgs;
+    protected List<LambdaFunction> funcs;
 
-    public LayerWithProgress(Shell shell, PreferenceStore ps, List<LambdaFunction> orgs) {
+    public LayerWithProgress(Shell shell, PreferenceStore ps, List<LambdaFunction> funcs) {
         this.shell = shell;
         this.ps = ps;
-        this.orgs = orgs;
+        this.funcs = funcs;
     }
 
     protected UpdateFunctionConfigurationResponse updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) throws Exception {

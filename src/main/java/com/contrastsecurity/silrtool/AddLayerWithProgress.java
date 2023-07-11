@@ -45,14 +45,14 @@ import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationR
 
 public class AddLayerWithProgress extends LayerWithProgress {
 
-    public AddLayerWithProgress(Shell shell, PreferenceStore ps, List<LambdaFunction> orgs) {
-        super(shell, ps, orgs);
+    public AddLayerWithProgress(Shell shell, PreferenceStore ps, List<LambdaFunction> funcs) {
+        super(shell, ps, funcs);
     }
 
     @Override
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-        monitor.beginTask("レイヤー登録", this.orgs.size()); //$NON-NLS-1$
-        for (LambdaFunction func : this.orgs) {
+        monitor.beginTask("レイヤー登録", this.funcs.size()); //$NON-NLS-1$
+        for (LambdaFunction func : this.funcs) {
             if (monitor.isCanceled()) {
                 throw new InterruptedException("キャンセルされました。");
             }
@@ -78,7 +78,6 @@ public class AddLayerWithProgress extends LayerWithProgress {
             List<String> layerArns = new ArrayList<String>();
             for (Layer layer : layers) {
                 String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-                System.out.println(layerName);
                 if (!layerName.startsWith("contrast-instrumentation-extension")) {
                     layerArns.add(layer.arn());
                 }

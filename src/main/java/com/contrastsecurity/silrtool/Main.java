@@ -73,23 +73,23 @@ public class Main {
 
     public static final String MASTER_PASSWORD = "changeme!"; //$NON-NLS-1$
 
-    private Button appLoadBtn;
+    private Button funcLoadBtn;
     private List<LambdaFunction> funcList;
     private List<Button> checkBoxList = new ArrayList<Button>();
     private List<Integer> selectedIdxes = new ArrayList<Integer>();
-    private Text srcListFilter;
-    private Label srcCount;
+    private Text funcListFilter;
+    private Label funcCount;
     private Table table;
     private Button bulkOnBtn;
     private Button bulkOffBtn;
-    private Button addBtn;
-    private Button rmvBtn;
+    private Button addLayerBtn;
+    private Button rmvLayerBtn;
     private Button settingsBtn;
 
     private PreferenceStore ps;
     private PreferenceDialog preferenceDialog;
 
-    private Map<String, LambdaFunction> fullAppMap;
+    private Map<String, LambdaFunction> fullFuncMap;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -177,17 +177,17 @@ public class Main {
                     ngRequiredFields = true;
                 }
                 if (ngRequiredFields) {
-                    addBtn.setEnabled(false);
-                    rmvBtn.setEnabled(false);
+                    addLayerBtn.setEnabled(false);
+                    rmvLayerBtn.setEnabled(false);
                 } else {
-                    addBtn.setEnabled(true);
-                    rmvBtn.setEnabled(true);
+                    addLayerBtn.setEnabled(true);
+                    rmvLayerBtn.setEnabled(true);
                 }
                 setWindowTitle();
             }
         });
 
-        fullAppMap = new TreeMap<String, LambdaFunction>();
+        fullFuncMap = new TreeMap<String, LambdaFunction>();
         funcList = new ArrayList<LambdaFunction>();
 
         GridLayout baseLayout = new GridLayout(1, false);
@@ -196,60 +196,57 @@ public class Main {
         baseLayout.verticalSpacing = 8;
         shell.setLayout(baseLayout);
 
-        Composite assessShell = new Composite(shell, SWT.NONE);
-        assessShell.setLayout(new GridLayout(1, false));
-        GridData appListGrpGrDt = new GridData(GridData.FILL_BOTH);
-        assessShell.setLayoutData(appListGrpGrDt);
+        Composite composite = new Composite(shell, SWT.NONE);
+        composite.setLayout(new GridLayout(1, false));
+        GridData compositeGrDt = new GridData(GridData.FILL_BOTH);
+        composite.setLayoutData(compositeGrDt);
 
         Font bigFont = new Font(display, "Arial", 20, SWT.NORMAL);
-        appLoadBtn = new Button(assessShell, SWT.PUSH);
-        GC gc = new GC(appLoadBtn);
+        funcLoadBtn = new Button(composite, SWT.PUSH);
+        GC gc = new GC(funcLoadBtn);
         gc.setFont(bigFont);
         Point bigBtnSize = gc.textExtent(Messages.getString("main.vul.export.button.title"));
         gc.dispose();
-        GridData appLoadBtnGrDt = new GridData(GridData.FILL_HORIZONTAL);
-        appLoadBtnGrDt.minimumHeight = 36;
-        appLoadBtnGrDt.heightHint = bigBtnSize.y + 16;
-        appLoadBtnGrDt.horizontalSpan = 3;
-        appLoadBtn.setLayoutData(appLoadBtnGrDt);
-        appLoadBtn.setText("関数の読み込み");
-        appLoadBtn.setFont(new Font(display, "Arial", 16, SWT.NORMAL)); //$NON-NLS-1$
-        appLoadBtn.addSelectionListener(new SelectionAdapter() {
+        GridData funcLoadBtnGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        funcLoadBtnGrDt.minimumHeight = 36;
+        funcLoadBtnGrDt.heightHint = bigBtnSize.y + 16;
+        funcLoadBtnGrDt.horizontalSpan = 3;
+        funcLoadBtn.setLayoutData(funcLoadBtnGrDt);
+        funcLoadBtn.setText("関数の読み込み");
+        funcLoadBtn.setFont(new Font(display, "Arial", 16, SWT.NORMAL)); //$NON-NLS-1$
+        funcLoadBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 listFunctions();
             }
         });
 
-        Group orgTableGrp = new Group(assessShell, SWT.NONE);
-        GridLayout orgTableGrpLt = new GridLayout(2, false);
-        orgTableGrpLt.marginWidth = 10;
-        orgTableGrpLt.horizontalSpacing = 10;
-        orgTableGrp.setLayout(orgTableGrpLt);
-        GridData orgTableGrpGrDt = new GridData(GridData.FILL_BOTH);
-        // orgTableGrpGrDt.horizontalSpan = 3;
-        orgTableGrp.setLayoutData(orgTableGrpGrDt);
-        orgTableGrp.setText("関数一覧");
+        Group funcTableGrp = new Group(composite, SWT.NONE);
+        GridLayout funcTableGrpLt = new GridLayout(2, false);
+        funcTableGrpLt.marginWidth = 10;
+        funcTableGrpLt.horizontalSpacing = 10;
+        funcTableGrp.setLayout(funcTableGrpLt);
+        GridData funcTableGrpGrDt = new GridData(GridData.FILL_BOTH);
+        funcTableGrp.setLayoutData(funcTableGrpGrDt);
+        funcTableGrp.setText("関数一覧");
 
-        srcListFilter = new Text(orgTableGrp, SWT.BORDER);
-        GridData srcListFilterGrDt = new GridData(GridData.FILL_HORIZONTAL);
-        // srcListFilterGrDt.horizontalSpan = 1;
-        srcListFilter.setLayoutData(srcListFilterGrDt);
-        srcListFilter.setMessage("フィルタ...");
-        srcListFilter.addModifyListener(new ModifyListener() {
+        funcListFilter = new Text(funcTableGrp, SWT.BORDER);
+        GridData funcListFilterGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        funcListFilter.setLayoutData(funcListFilterGrDt);
+        funcListFilter.setMessage("フィルタ...");
+        funcListFilter.addModifyListener(new ModifyListener() {
             @Override
             public void modifyText(ModifyEvent event) {
-                srcListFilterUpdate();
+                funcListFilterUpdate();
             }
         });
-        new Label(orgTableGrp, SWT.LEFT).setText(""); //$NON-NLS-1$
+        new Label(funcTableGrp, SWT.LEFT).setText(""); //$NON-NLS-1$
 
-        table = new Table(orgTableGrp, SWT.BORDER);
+        table = new Table(funcTableGrp, SWT.BORDER);
         GridData tableGrDt = new GridData(GridData.FILL_BOTH);
         table.setLayoutData(tableGrDt);
         table.setLinesVisible(true);
         table.setHeaderVisible(true);
-
         table.addListener(SWT.MouseDoubleClick, new Listener() {
             @Override
             public void handleEvent(Event event) {
@@ -263,9 +260,9 @@ public class Main {
         Menu menuTable = new Menu(table);
         table.setMenu(menuTable);
 
-        MenuItem miTag = new MenuItem(menuTable, SWT.NONE);
-        miTag.setText("詳細を見る");
-        miTag.addSelectionListener(new SelectionAdapter() {
+        MenuItem miDetail = new MenuItem(menuTable, SWT.NONE);
+        miDetail.setText("詳細を見る");
+        miDetail.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 int index = table.getSelectionIndex();
@@ -291,7 +288,7 @@ public class Main {
         column4.setWidth(120);
         column4.setText("ランタイム");
 
-        Composite buttonGrp = new Composite(orgTableGrp, SWT.NONE);
+        Composite buttonGrp = new Composite(funcTableGrp, SWT.NONE);
         GridData buttonGrpGrDt = new GridData(GridData.FILL_VERTICAL);
         buttonGrpGrDt.verticalSpan = 2;
         buttonGrp.setLayoutData(buttonGrpGrDt);
@@ -330,11 +327,11 @@ public class Main {
             }
         });
 
-        addBtn = new Button(buttonGrp, SWT.NULL);
-        addBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        addBtn.setText("レイヤー登録");
-        addBtn.setEnabled(false);
-        addBtn.addSelectionListener(new SelectionAdapter() {
+        addLayerBtn = new Button(buttonGrp, SWT.NULL);
+        addLayerBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        addLayerBtn.setText("レイヤー登録");
+        addLayerBtn.setEnabled(false);
+        addLayerBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent event) {
                 List<LambdaFunction> targetFuncs = new ArrayList<LambdaFunction>();
@@ -361,11 +358,11 @@ public class Main {
             }
         });
 
-        rmvBtn = new Button(buttonGrp, SWT.NULL);
-        rmvBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        rmvBtn.setText("レイヤー削除");
-        rmvBtn.setEnabled(false);
-        rmvBtn.addSelectionListener(new SelectionAdapter() {
+        rmvLayerBtn = new Button(buttonGrp, SWT.NULL);
+        rmvLayerBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        rmvLayerBtn.setText("レイヤー削除");
+        rmvLayerBtn.setEnabled(false);
+        rmvLayerBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent event) {
                 List<LambdaFunction> targetFuncs = new ArrayList<LambdaFunction>();
@@ -418,13 +415,13 @@ public class Main {
             }
         });
 
-        this.srcCount = new Label(orgTableGrp, SWT.RIGHT);
-        GridData srcCountGrDt = new GridData(GridData.FILL_HORIZONTAL);
-        srcCountGrDt.minimumHeight = 16;
-        this.srcCount.setLayoutData(srcCountGrDt);
-        this.srcCount.setFont(new Font(display, "Arial", 12, SWT.NORMAL)); //$NON-NLS-1$
-        this.srcCount.setText("0"); //$NON-NLS-1$
-        this.srcCount.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+        this.funcCount = new Label(funcTableGrp, SWT.RIGHT);
+        GridData funcCountGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        funcCountGrDt.minimumHeight = 16;
+        this.funcCount.setLayoutData(funcCountGrDt);
+        this.funcCount.setFont(new Font(display, "Arial", 12, SWT.NORMAL)); //$NON-NLS-1$
+        this.funcCount.setText("0"); //$NON-NLS-1$
+        this.funcCount.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 
         int width = this.ps.getInt(PreferenceConstants.MEM_WIDTH);
         int height = this.ps.getInt(PreferenceConstants.MEM_HEIGHT);
@@ -450,7 +447,7 @@ public class Main {
         display.dispose();
     }
 
-    private void srcListFilterUpdate() {
+    private void funcListFilterUpdate() {
         for (Button button : checkBoxList) {
             button.dispose();
         }
@@ -458,13 +455,13 @@ public class Main {
         table.clearAll();
         table.removeAll();
         funcList.clear();
-        String keyword = srcListFilter.getText().trim();
+        String keyword = funcListFilter.getText().trim();
         if (keyword.isEmpty()) {
-            for (String appLabel : fullAppMap.keySet()) {
-                funcList.add(fullAppMap.get(appLabel));
+            for (String appLabel : fullFuncMap.keySet()) {
+                funcList.add(fullFuncMap.get(appLabel));
             }
         } else {
-            for (String appLabel : fullAppMap.keySet()) {
+            for (String appLabel : fullFuncMap.keySet()) {
                 boolean isKeywordValid = true;
                 if (!keyword.isEmpty()) {
                     if (!appLabel.toLowerCase().contains(keyword.toLowerCase())) {
@@ -472,14 +469,14 @@ public class Main {
                     }
                 }
                 if (isKeywordValid) {
-                    funcList.add(fullAppMap.get(appLabel));
+                    funcList.add(fullFuncMap.get(appLabel));
                 }
             }
         }
         for (LambdaFunction func : funcList) {
             addFuncToTable(func);
         }
-        srcCount.setText(String.valueOf(funcList.size()));
+        funcCount.setText(String.valueOf(funcList.size()));
     }
 
     public void updateTableItem(LambdaFunction func) {
@@ -517,14 +514,14 @@ public class Main {
     }
 
     public void listFunctions() {
-        srcListFilter.setText("");
+        funcListFilter.setText("");
         for (Button button : checkBoxList) {
             button.dispose();
         }
         checkBoxList.clear();
         table.clearAll();
         table.removeAll();
-        fullAppMap.clear();
+        fullFuncMap.clear();
         funcList.clear();
         try {
             Region region = Region.of(ps.getString(PreferenceConstants.REGION));
@@ -538,13 +535,13 @@ public class Main {
                 }
                 LambdaFunction func = new LambdaFunction(config);
                 funcList.add(func);
-                fullAppMap.put(func.getName(), func);
+                fullFuncMap.put(func.getName(), func);
             }
             awsLambda.close();
             for (LambdaFunction func : funcList) {
                 addFuncToTable(func);
             }
-            srcCount.setText(String.valueOf(funcList.size()));
+            funcCount.setText(String.valueOf(funcList.size()));
         } catch (LambdaException e) {
             System.err.println(e.getMessage());
         }
