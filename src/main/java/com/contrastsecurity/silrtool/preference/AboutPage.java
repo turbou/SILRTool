@@ -113,21 +113,31 @@ public class AboutPage extends PreferencePage {
                 }
             }
         });
-        new Link(licenseGrp, SWT.NONE).setText("- commons-codec 1.11"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- commons-csv 1.8"); //$NON-NLS-1$
+        // AWS SDK for Java
+        new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:s3 2.20.90"); //$NON-NLS-1$
+        new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:sso 2.20.90"); //$NON-NLS-1$
+        new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:ssooidc 2.20.90"); //$NON-NLS-1$
+        new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:regions 2.20.90"); //$NON-NLS-1$
+        new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:lambda 2.20.90"); //$NON-NLS-1$
+
         new Link(licenseGrp, SWT.NONE).setText("- commons-exec 1.3"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- commons-io 2.8.0"); //$NON-NLS-1$
         new Link(licenseGrp, SWT.NONE).setText("- commons-lang3 3.4"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- commons-logging 1.2"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- gson 2.8.6"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- httpclient 4.5.13"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- httpcore 4.4.13"); //$NON-NLS-1$
         new Link(licenseGrp, SWT.NONE).setText("- jasypt 1.9.3"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- okhttp 4.10.0"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- okhttp-urlconnection 4.10.0"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- log4j-core 2.17.2"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- log4j-api 2.17.2"); //$NON-NLS-1$
-        new Link(licenseGrp, SWT.NONE).setText("- snakeyaml 1.16"); //$NON-NLS-1$
+
+        Link mitLicenseLinkLbl = new Link(licenseGrp, SWT.NONE);
+        mitLicenseLinkLbl.setText("This software includes the work that is distributed in the <a>MIT</a>"); //$NON-NLS-1$
+        mitLicenseLinkLbl.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+            public void widgetSelected(org.eclipse.swt.events.SelectionEvent event) {
+                try {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().browse(new URI("https://opensource.org/licenses/mit-license.php")); //$NON-NLS-1$
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        new Link(licenseGrp, SWT.NONE).setText("- slf4j-simple:2.0.5"); //$NON-NLS-1$
 
         Link eplLicenseLinkLbl = new Link(licenseGrp, SWT.NONE);
         eplLicenseLinkLbl.setText("This software includes the work that is distributed in the <a>Eclipse Public License 1.0</a>"); //$NON-NLS-1$
