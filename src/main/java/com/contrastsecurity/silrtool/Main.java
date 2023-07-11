@@ -254,12 +254,12 @@ public class Main {
         TableColumn column2 = new TableColumn(table, SWT.LEFT);
         column2.setWidth(300);
         column2.setText("関数名");
-        TableColumn column3 = new TableColumn(table, SWT.LEFT);
-        column3.setWidth(120);
-        column3.setText("ランタイム");
-        TableColumn column4 = new TableColumn(table, SWT.CENTER);
-        column4.setWidth(60);
-        column4.setText("Contrast");
+        TableColumn column3 = new TableColumn(table, SWT.CENTER);
+        column3.setWidth(60);
+        column3.setText("Contrast");
+        TableColumn column4 = new TableColumn(table, SWT.LEFT);
+        column4.setWidth(120);
+        column4.setText("ランタイム");
 
         Composite buttonGrp = new Composite(orgTableGrp, SWT.NONE);
         GridData buttonGrpGrDt = new GridData(GridData.FILL_VERTICAL);
@@ -313,6 +313,9 @@ public class Main {
                         targetFuncs.add(funcList.get(checkBoxList.indexOf(chkBtn)));
                     }
                 }
+                if (targetFuncs.isEmpty()) {
+                    return;
+                }
                 LayerWithProgress progress = new AddLayerWithProgress(shell, ps, targetFuncs);
                 ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー登録");
                 try {
@@ -340,6 +343,9 @@ public class Main {
                     if (chkBtn.getSelection()) {
                         targetFuncs.add(funcList.get(checkBoxList.indexOf(chkBtn)));
                     }
+                }
+                if (targetFuncs.isEmpty()) {
+                    return;
                 }
                 LayerWithProgress progress = new RmvLayerWithProgress(shell, ps, targetFuncs);
                 ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー削除");
@@ -449,7 +455,7 @@ public class Main {
     public void updateTableItem(LambdaFunction func) {
         int index = funcList.indexOf(func);
         TableItem item = table.getItem(index);
-        item.setText(4, func.hasContrastLayerStr());
+        item.setText(3, func.hasContrastLayerStr());
     }
 
     private void addFuncToTable(LambdaFunction org) {
@@ -476,8 +482,8 @@ public class Main {
         editor.setEditor(button, item, 1);
         checkBoxList.add(button);
         item.setText(2, org.getName());
-        item.setText(3, org.getRuntime());
-        item.setText(4, org.hasContrastLayerStr());
+        item.setText(3, org.hasContrastLayerStr());
+        item.setText(4, org.getRuntime());
     }
 
     public void listFunctions() {
