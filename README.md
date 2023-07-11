@@ -18,8 +18,41 @@ compile group: 'org.eclipse.swt', name: 'org.eclipse.swt.win32.win32.x86_64', ve
 ```
 
 あとはEclipseでプロジェクトをリフレッシュして実行してください。  
-メインクラスは```mori.Main```を選んでください。
+メインクラスは```com.contrastsecurity.silrtool.Main```を選んでください。
 
-あとで、exeで実行できるバイナリなども用意していきます。
+#### macOS (jar to app)
+1. Using javapackager.
+1. If bundle jre, place the jre folder anywhere on the file system.
+1. If needed, correct lines 3 to 7 in jarpackage.sh.
+1. run `jarpackage.sh`.  
+    ```bash
+    ./jarpackage.sh
+    ```
+    app folder will be created under `build\libs/bundle`.
+
+#### macOS
+- Install certifiate to your PC.  
+  Double-click the pfx file to install into KeychainAccess. At that time, certificate password is needed.  
+  After installation, copy the `Common Name`.
+- Sign  
+  Using codesign.  
+  ```bash
+  codesign --deep -s "Contrast Security, Inc." -v SILRTool_1.0.0.app
+  ```
+- Confirm Digital Signatures
+  ```bash
+  codesign -d --verbose=4 SILRTool_1.0.0.app
+  ```
+    
+#### How to compress
+- Windows  
+  Using 7-Zip.
+- macOS
+  ```bash
+  # Installing p7zip
+  brew install p7zip
+  # Compress
+  7z a SILRTool_1.0.0.cli7z SILRTool_1.0.0.app/
+  ```
 
 以上
