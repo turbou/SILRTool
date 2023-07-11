@@ -2,6 +2,6 @@
 /build
 /.gradle
 /.settings
-/serverlesstool.properties
-/serverlesstool.log
+/silrtool.properties
+/silrtool.log
 .DS_Store
