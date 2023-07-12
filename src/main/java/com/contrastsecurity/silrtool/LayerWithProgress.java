@@ -23,21 +23,29 @@
 
 package com.contrastsecurity.silrtool;
 
+import java.net.URI;
 import java.util.List;
 
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.widgets.Shell;
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import com.contrastsecurity.silrtool.model.LambdaFunction;
 import com.contrastsecurity.silrtool.preference.PreferenceConstants;
 
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.http.SdkHttpClient;
+import software.amazon.awssdk.http.SdkHttpConfigurationOption;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.http.apache.ProxyConfiguration;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.LambdaClientBuilder;
 import software.amazon.awssdk.services.lambda.model.Environment;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationRequest;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
+import software.amazon.awssdk.utils.AttributeMap;
 
 public abstract class LayerWithProgress implements IRunnableWithProgress {
 
@@ -53,7 +61,48 @@ public abstract class LayerWithProgress implements IRunnableWithProgress {
 
     protected UpdateFunctionConfigurationResponse updateFunctionConfiguration(String functionName, Environment environment, List<String> layers) throws Exception {
         Region region = Region.of(ps.getString(PreferenceConstants.REGION));
-        LambdaClient awsLambda = LambdaClient.builder().region(region).credentialsProvider(ProfileCredentialsProvider.create()).build();
+        AttributeMap attrMap = null;
+        if (this.ps.getBoolean(PreferenceConstants.IGNORE_SSLCERT_CHECK)) {
+            attrMap = AttributeMap.builder().put(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES, true).build();
+        }
+        SdkHttpClient httpClient = null;
+        if (ps.getBoolean(PreferenceConstants.PROXY_YUKO)) {
+            String proxyHostPort = String.format("%s:%s", ps.getString(PreferenceConstants.PROXY_HOST), ps.getString(PreferenceConstants.PROXY_PORT));
+            ProxyConfiguration.Builder proxyBuilder = ProxyConfiguration.builder();
+            proxyBuilder.endpoint(URI.create(proxyHostPort));
+            if (!this.ps.getString(PreferenceConstants.PROXY_AUTH).equals("none")) { //$NON-NLS-1$
+                // プロキシ認証あり
+                if (this.ps.getString(PreferenceConstants.PROXY_AUTH).equals("input")) { //$NON-NLS-1$
+                    proxyBuilder.username(ps.getString(PreferenceConstants.PROXY_TMP_USER));
+                    proxyBuilder.password(ps.getString(PreferenceConstants.PROXY_TMP_PASS));
+                } else {
+                    BasicTextEncryptor encryptor = new BasicTextEncryptor();
+                    encryptor.setPassword(Main.MASTER_PASSWORD);
+                    try {
+                        String proxy_pass = encryptor.decrypt(this.ps.getString(PreferenceConstants.PROXY_PASS));
+                        proxyBuilder.username(ps.getString(PreferenceConstants.PROXY_USER));
+                        proxyBuilder.password(proxy_pass);
+                    } catch (Exception e) {
+                        throw new Exception("プロキシパスワードの復号化に失敗しました。\\r\\nパスワードの設定をやり直してください。");
+                    }
+                }
+            }
+            if (attrMap != null) {
+                httpClient = ApacheHttpClient.builder().proxyConfiguration(proxyBuilder.build()).buildWithDefaults(attrMap);
+            } else {
+                httpClient = ApacheHttpClient.builder().proxyConfiguration(proxyBuilder.build()).build();
+            }
+        } else {
+            if (attrMap != null) {
+                httpClient = ApacheHttpClient.builder().buildWithDefaults(attrMap);
+            }
+        }
+        LambdaClientBuilder clientBuilder = LambdaClient.builder();
+        clientBuilder.region(region).credentialsProvider(ProfileCredentialsProvider.create());
+        if (httpClient != null) {
+            clientBuilder.httpClient(httpClient);
+        }
+        LambdaClient awsLambda = clientBuilder.build();
         UpdateFunctionConfigurationRequest configurationRequest = UpdateFunctionConfigurationRequest.builder().functionName(functionName).environment(environment).layers(layers)
                 .build();
         UpdateFunctionConfigurationResponse response = awsLambda.updateFunctionConfiguration(configurationRequest);

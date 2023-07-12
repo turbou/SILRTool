@@ -26,6 +26,7 @@ dependencies {
     compile 'software.amazon.awssdk:ssooidc:2.20.90'
     compile 'software.amazon.awssdk:regions:2.20.90'
     compile 'software.amazon.awssdk:lambda:2.20.90'
+    compile 'software.amazon.awssdk:apache-client:2.20.90'
     compile 'org.slf4j:slf4j-simple:2.0.5'
 
     compile group: 'org.apache.commons', name: 'commons-exec', version: '1.3'

@@ -119,6 +119,7 @@ public class AboutPage extends PreferencePage {
         new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:ssooidc 2.20.90"); //$NON-NLS-1$
         new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:regions 2.20.90"); //$NON-NLS-1$
         new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:lambda 2.20.90"); //$NON-NLS-1$
+        new Link(licenseGrp, SWT.NONE).setText("- software.amazon.awssdk:apache-client 2.20.90"); //$NON-NLS-1$
 
         new Link(licenseGrp, SWT.NONE).setText("- commons-exec 1.3"); //$NON-NLS-1$
         new Link(licenseGrp, SWT.NONE).setText("- commons-lang3 3.4"); //$NON-NLS-1$

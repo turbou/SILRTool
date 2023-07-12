@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="output" path="bin/default"/>
 	<classpathentry output="bin/main" kind="src" path="src/main/java">
 		<attributes>
 			<attribute name="gradle_scope" value="main"/>
@@ -13,6 +12,7 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="output" path="bin/default"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/s3/2.20.90/b496e98fe4001ddf69df9139a8d7bf0e1475d64a/s3-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/s3/2.20.90/89089079e9326945491d5e6d816eb371ace23d27/s3-2.20.90.jar">
 		<attributes>
@@ -60,6 +60,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/regions/2.20.90/e37f7b7b0132e5b5daf8ae4bcb0da28b590e9be2/regions-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/regions/2.20.90/296176cc032888bee40506e3b75455c18635da2a/regions-2.20.90.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/apache-client/2.20.90/e5a6110fc3ebf21c505c16d942aa5745f0ce3591/apache-client-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/apache-client/2.20.90/b1ec0cae465000a8f14819693daefa03fb45e9ac/apache-client-2.20.90.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
@@ -179,26 +184,6 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.3/e6ffdff8c438d959376c91d94b319457354a84c5/reactive-streams-1.0.3-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.3/d9fb7a7926ffa635b3dcaa5049fb2bfa25b3e7d0/reactive-streams-1.0.3.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.eventstream/eventstream/1.0.1/7121512c9d99c6b4c6e7a6a858bb05cb2643d6b3/eventstream-1.0.1-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.eventstream/eventstream/1.0.1/6ff8649dffc5190366ada897ba8525a836297784/eventstream-1.0.1.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/apache-client/2.20.90/e5a6110fc3ebf21c505c16d942aa5745f0ce3591/apache-client-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/apache-client/2.20.90/b1ec0cae465000a8f14819693daefa03fb45e9ac/apache-client-2.20.90.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/netty-nio-client/2.20.90/9efa7938189fe95e087d8b4072a9597a05de0bf8/netty-nio-client-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/netty-nio-client/2.20.90/e61cf9666378e3be09bec23a2db51683bd793181/netty-nio-client-2.20.90.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/9654e91a61d7662c36be6710ef8e720c0e3f9807/httpclient-4.5.13-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
@@ -210,6 +195,26 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.15/843bc57fd042051e994846da8167bb7ca677a6d/commons-codec-1.15-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.15/49d94806b6e3dc933dacbd8acb0fdbab8ebd1e5d/commons-codec-1.15.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.3/e6ffdff8c438d959376c91d94b319457354a84c5/reactive-streams-1.0.3-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.3/d9fb7a7926ffa635b3dcaa5049fb2bfa25b3e7d0/reactive-streams-1.0.3.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.eventstream/eventstream/1.0.1/7121512c9d99c6b4c6e7a6a858bb05cb2643d6b3/eventstream-1.0.1-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.eventstream/eventstream/1.0.1/6ff8649dffc5190366ada897ba8525a836297784/eventstream-1.0.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/netty-nio-client/2.20.90/9efa7938189fe95e087d8b4072a9597a05de0bf8/netty-nio-client-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/netty-nio-client/2.20.90/e61cf9666378e3be09bec23a2db51683bd793181/netty-nio-client-2.20.90.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
@@ -260,11 +265,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.86.Final/c4ed09bdd515d9a716e1daf6e46c12d55e123596/netty-common-4.1.86.Final-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.86.Final/1dceab4662a9cc93faf87b237bb41103b1bc7f0e/netty-common-4.1.86.Final.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
