@@ -24,6 +24,7 @@
 package com.contrastsecurity.silrtool.preference;
 
 public class PreferenceConstants {
+    public static final String PROFILE_NAME = new String("com.contrastsecurity.silrtool.profile_name"); //$NON-NLS-1$
     public static final String LAYER_ARN_PYTHON = new String("com.contrastsecurity.silrtool.layer_arn_python"); //$NON-NLS-1$
     public static final String LAYER_ARN_NODEJS = new String("com.contrastsecurity.silrtool.layer_arn_nodejs"); //$NON-NLS-1$
     public static final String ENV_EXEC_WRAPPER = new String("com.contrastsecurity.silrtool.env_exec_wrapper"); //$NON-NLS-1$

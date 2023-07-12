@@ -584,7 +584,13 @@ public class Main {
                 }
             }
             LambdaClientBuilder clientBuilder = LambdaClient.builder();
-            clientBuilder.region(region).credentialsProvider(ProfileCredentialsProvider.create());
+            ProfileCredentialsProvider profileProvider = null;
+            if (ps.getString(PreferenceConstants.PROFILE_NAME).isEmpty()) {
+                profileProvider = ProfileCredentialsProvider.create();
+            } else {
+                profileProvider = ProfileCredentialsProvider.create(ps.getString(PreferenceConstants.PROFILE_NAME));
+            }
+            clientBuilder.region(region).credentialsProvider(profileProvider);
             if (httpClient != null) {
                 clientBuilder.httpClient(httpClient);
             }

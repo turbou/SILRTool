@@ -54,6 +54,7 @@ import software.amazon.awssdk.regions.Region;
 public class BasePreferencePage extends PreferencePage {
 
     private ServerLessToolShell shell;
+    private Text profileNameTxt;
     private Combo regionCombo;
     private Text layerArnPythonTxt;
     private Text layerArnNodeJSTxt;
@@ -77,15 +78,26 @@ public class BasePreferencePage extends PreferencePage {
         compositeLt.verticalSpacing = 20;
         composite.setLayout(compositeLt);
 
-        Composite regionComp = new Composite(composite, SWT.NONE);
-        GridLayout regionCompLt = new GridLayout(2, false);
-        regionComp.setLayout(regionCompLt);
-        GridData regionCompGrDt = new GridData(GridData.FILL_HORIZONTAL);
-        regionComp.setLayoutData(regionCompGrDt);
+        Composite commonComp = new Composite(composite, SWT.NONE);
+        GridLayout commonCompLt = new GridLayout(2, false);
+        commonCompLt.verticalSpacing = 10;
+        commonComp.setLayout(commonCompLt);
+        GridData commonCompGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        commonComp.setLayoutData(commonCompGrDt);
 
-        new Label(regionComp, SWT.LEFT).setText("リージョン:");
+        new Label(commonComp, SWT.LEFT).setText("プロファイル:");
+        profileNameTxt = new Text(commonComp, SWT.BORDER);
+        profileNameTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        profileNameTxt.setText(ps.getString(PreferenceConstants.PROFILE_NAME));
+        profileNameTxt.setMessage("ブランクの場合、defaultプロファイルを使用します。");
+        profileNameTxt.addListener(SWT.FocusIn, new Listener() {
+            public void handleEvent(Event e) {
+                profileNameTxt.selectAll();
+            }
+        });
 
-        regionCombo = new Combo(regionComp, SWT.READ_ONLY);
+        new Label(commonComp, SWT.LEFT).setText("リージョン:");
+        regionCombo = new Combo(commonComp, SWT.READ_ONLY);
         GridData regionComboGrDt = new GridData(GridData.FILL_HORIZONTAL);
         regionCombo.setLayoutData(regionComboGrDt);
         List<Region> sorted = Region.regions().stream().sorted(Comparator.comparing(Region::id)).collect(Collectors.toList());
@@ -212,6 +224,10 @@ public class BasePreferencePage extends PreferencePage {
             return true;
         }
         List<String> errors = new ArrayList<String>();
+
+        if (!this.layerArnPythonTxt.getText().isEmpty()) {
+            ps.setValue(PreferenceConstants.PROFILE_NAME, this.profileNameTxt.getText());
+        }
 
         if (this.regionCombo.getText().isEmpty()) {
             errors.add(Messages.getString("connectionpreferencepage.message.dialog.connection.timeout.empty.error.message")); //$NON-NLS-1$
