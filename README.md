@@ -9,8 +9,10 @@ ContrastサーバレスでIAST解析を行う際に必要なContrastレイヤー
 
 ## 前提条件
 ```aws configure```または**手動**にてAWSのプロファイル（以下のファイル）を作成しておいてください。    
-- ~/.aws/config
-- ~/.aws/credentials
+- ~/.aws/config  
+  フォーマット、リージョンを設定
+- ~/.aws/credentials  
+  トークン、シークレットキーなどの認証情報
 
 **AWS Cliのインストールは必須ではありません。上記のプロファイルがあれば動きます。**
 
