@@ -312,7 +312,6 @@ public class Main {
 
         Composite buttonGrp = new Composite(funcTableGrp, SWT.NONE);
         GridData buttonGrpGrDt = new GridData(GridData.FILL_VERTICAL);
-        buttonGrpGrDt.verticalSpan = 2;
         buttonGrp.setLayoutData(buttonGrpGrDt);
         buttonGrp.setLayout(new GridLayout(1, true));
 
@@ -444,6 +443,21 @@ public class Main {
         this.funcCount.setFont(new Font(display, "Arial", 12, SWT.NORMAL)); //$NON-NLS-1$
         this.funcCount.setText("0"); //$NON-NLS-1$
         this.funcCount.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+
+        Label icon = new Label(funcTableGrp, SWT.NONE);
+        GridData iconGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        iconGrDt.minimumHeight = 16;
+        iconGrDt.horizontalAlignment = GridData.END;
+        icon.setLayoutData(iconGrDt);
+        Image iconImg = new Image(shell.getDisplay(), Main.class.getClassLoader().getResourceAsStream("help.png")); //$NON-NLS-1$
+        icon.setImage(iconImg);
+        icon.setToolTipText("使い方"); //$NON-NLS-1$
+        icon.addListener(SWT.MouseUp, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                new HelpDialog(shell).open();
+            }
+        });
 
         int width = this.ps.getInt(PreferenceConstants.MEM_WIDTH);
         int height = this.ps.getInt(PreferenceConstants.MEM_HEIGHT);
