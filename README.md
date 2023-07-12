@@ -3,18 +3,20 @@
 
 ### 現在まだプロトです。
 
-### 概要
+## 概要
 ContrastサーバレスでIAST解析を行う際に必要なContrastレイヤー、環境変数の追加、削除を  
 簡単な操作で行えるようにしたツールです。
 
-### 前提条件
-```aws configure```または手動にてAWSのプロファイル（以下のファイル）を作成しておいてください。    
-- ~/.aws/config
-- ~/.aws/credentials
+## 前提条件
+```aws configure```または**手動**にてAWSのプロファイル（以下のファイル）を作成しておいてください。    
+- ~/.aws/config  
+  フォーマット、リージョンを設定
+- ~/.aws/credentials  
+  トークン、シークレットキーなどの認証情報
 
-**AWS Cliのインストールは任意となります。**
+**AWS Cliのインストールは必須ではありません。上記のプロファイルがあれば動きます。**
 
-### Eclipseでの起動の仕方
+## Eclipseでの起動の仕方
 今のbuild.gradleはMacでそのまま動くようになっています。  
 java -versionでjdk1.8であることを確認してください。  
 ```bash
@@ -30,7 +32,8 @@ compile group: 'org.eclipse.swt', name: 'org.eclipse.swt.win32.win32.x86_64', ve
 あとはEclipseでプロジェクトをリフレッシュして実行してください。  
 メインクラスは```com.contrastsecurity.silrtool.Main```を選んでください。
 
-#### macOS (jar to app)
+## 配布用バイナリの作成について
+### macOS (jar to app)
 1. Using javapackager.
 1. If bundle jre, place the jre folder anywhere on the file system.
 1. If needed, correct lines 3 to 7 in jarpackage.sh.
@@ -40,7 +43,7 @@ compile group: 'org.eclipse.swt', name: 'org.eclipse.swt.win32.win32.x86_64', ve
     ```
     app folder will be created under `build\libs/bundle`.
 
-#### macOS
+### macOS
 - Install certifiate to your PC.  
   Double-click the pfx file to install into KeychainAccess. At that time, certificate password is needed.  
   After installation, copy the `Common Name`.
@@ -54,7 +57,7 @@ compile group: 'org.eclipse.swt', name: 'org.eclipse.swt.win32.win32.x86_64', ve
   codesign -d --verbose=4 SILRTool_1.0.0.app
   ```
     
-#### How to compress
+### How to compress
 - Windows  
   Using 7-Zip.
 - macOS
