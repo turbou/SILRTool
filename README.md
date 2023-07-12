@@ -12,7 +12,7 @@ ContrastサーバレスでIAST解析を行う際に必要なContrastレイヤー
 - ~/.aws/config
 - ~/.aws/credentials
 
-**AWS Cliのインストールは任意となります。**
+**AWS Cliのインストールは必須ではありません。上記のプロファイルがあれば動きます。**
 
 ### Eclipseでの起動の仕方
 今のbuild.gradleはMacでそのまま動くようになっています。  
