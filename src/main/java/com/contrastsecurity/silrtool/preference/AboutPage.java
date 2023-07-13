@@ -53,12 +53,12 @@ public class AboutPage extends PreferencePage {
         parentGrLt.verticalSpacing = 20;
         parent.setLayout(parentGrLt);
 
-        Composite appGrp = new Composite(parent, SWT.NONE);
-        appGrp.setLayout(new GridLayout(2, false));
-        GridData appGrpGrDt = new GridData(GridData.FILL_HORIZONTAL);
-        appGrp.setLayoutData(appGrpGrDt);
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new GridLayout(2, false));
+        GridData compositeGrDt = new GridData(GridData.FILL_HORIZONTAL);
+        composite.setLayoutData(compositeGrDt);
 
-        Label icon = new Label(appGrp, SWT.NONE);
+        Label icon = new Label(composite, SWT.NONE);
         GridData iconGrDt = new GridData();
         iconGrDt.horizontalSpan = 2;
         iconGrDt.minimumHeight = 80;
@@ -67,28 +67,33 @@ public class AboutPage extends PreferencePage {
         Image iconImg = new Image(parent.getDisplay(), Main.class.getClassLoader().getResourceAsStream("banner.png")); //$NON-NLS-1$
         icon.setImage(iconImg);
 
-        Label fullAppNameTitleLbl = new Label(appGrp, SWT.NONE);
+        Label blankLbl = new Label(composite, SWT.NONE);
+        GridData blankLblGrDt = new GridData();
+        blankLblGrDt.horizontalSpan = 2;
+        blankLbl.setLayoutData(blankLblGrDt);
+
+        Label fullAppNameTitleLbl = new Label(composite, SWT.NONE);
         GridData fullAppNameTitleLblGrDt = new GridData();
         fullAppNameTitleLblGrDt.minimumHeight = 100;
         fullAppNameTitleLbl.setLayoutData(fullAppNameTitleLblGrDt);
         fullAppNameTitleLbl.setText("SILRTool:"); //$NON-NLS-1$
-        Label fullAppNameLbl = new Label(appGrp, SWT.NONE);
+        Label fullAppNameLbl = new Label(composite, SWT.NONE);
         GridData fullAppNameLblGrDt = new GridData();
         fullAppNameLblGrDt.minimumHeight = 100;
         fullAppNameLbl.setLayoutData(fullAppNameLblGrDt);
         fullAppNameLbl.setText("Serverless Instrumentation Layers Registration Tool"); //$NON-NLS-1$
 
-        Label versionTitleLbl = new Label(appGrp, SWT.NONE);
+        Label versionTitleLbl = new Label(composite, SWT.NONE);
         GridData versionTitleLblGrDt = new GridData();
         versionTitleLblGrDt.minimumHeight = 100;
         versionTitleLbl.setLayoutData(versionTitleLblGrDt);
         versionTitleLbl.setText("Version:"); //$NON-NLS-1$
-        Label versionValueLbl = new Label(appGrp, SWT.NONE);
+        Label versionValueLbl = new Label(composite, SWT.NONE);
         GridData versionValueLblGrDt = new GridData();
         versionValueLbl.setLayoutData(versionValueLblGrDt);
         versionValueLbl.setText("1.0.0"); //$NON-NLS-1$
 
-        Label copyrightLbl = new Label(appGrp, SWT.NONE);
+        Label copyrightLbl = new Label(composite, SWT.NONE);
         GridData copyrightLblGrDt = new GridData();
         copyrightLblGrDt.horizontalSpan = 2;
         copyrightLbl.setLayoutData(copyrightLblGrDt);
