@@ -120,7 +120,7 @@ public class BasePreferencePage extends PreferencePage {
         timeoutGrp.setText("ContrastテレメトリレイヤーARN");
 
         // ========== Python ========== //
-        new Label(timeoutGrp, SWT.LEFT).setText("Python:");
+        new Label(timeoutGrp, SWT.LEFT).setText("Python:"); //$NON-NLS-1$
         layerArnPythonTxt = new Text(timeoutGrp, SWT.BORDER);
         layerArnPythonTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         layerArnPythonTxt.setText(ps.getString(PreferenceConstants.LAYER_ARN_PYTHON));
@@ -131,7 +131,7 @@ public class BasePreferencePage extends PreferencePage {
         });
 
         // ========== NodeJS ========== //
-        new Label(timeoutGrp, SWT.LEFT).setText("NodeJS:");
+        new Label(timeoutGrp, SWT.LEFT).setText("NodeJS:"); //$NON-NLS-1$
         layerArnNodeJSTxt = new Text(timeoutGrp, SWT.BORDER);
         layerArnNodeJSTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         layerArnNodeJSTxt.setText(ps.getString(PreferenceConstants.LAYER_ARN_NODEJS));
@@ -151,7 +151,7 @@ public class BasePreferencePage extends PreferencePage {
         envGrp.setText("環境変数");
 
         // ========== AWS_LAMBDA_EXEC_WRAPPER ========== //
-        new Label(envGrp, SWT.LEFT).setText("AWS_LAMBDA_EXEC_WRAPPER:");
+        new Label(envGrp, SWT.LEFT).setText("AWS_LAMBDA_EXEC_WRAPPER:"); //$NON-NLS-1$
         envExecWrapperTxt = new Text(envGrp, SWT.BORDER);
         envExecWrapperTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         envExecWrapperTxt.setText(ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER));
@@ -162,7 +162,7 @@ public class BasePreferencePage extends PreferencePage {
         });
 
         // ========== CONTRAST_BUCKET ========== //
-        new Label(envGrp, SWT.LEFT).setText("CONTRAST_BUCKET:");
+        new Label(envGrp, SWT.LEFT).setText("CONTRAST_BUCKET:"); //$NON-NLS-1$
         envS3BucketTxt = new Text(envGrp, SWT.BORDER);
         envS3BucketTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         envS3BucketTxt.setText(ps.getString(PreferenceConstants.ENV_S3_BUCKET));
@@ -238,7 +238,7 @@ public class BasePreferencePage extends PreferencePage {
         if (this.layerArnPythonTxt.getText().isEmpty()) {
             errors.add("・PythonのテレメトリーレイヤのARNが設定されていません。");
         } else {
-            if (!this.layerArnPythonTxt.getText().trim().startsWith("arn:aws:lambda:")) {
+            if (!this.layerArnPythonTxt.getText().trim().startsWith("arn:aws:lambda:")) { //$NON-NLS-1$
                 errors.add("・LambdaのARNではないようです。");
             }
             ps.setValue(PreferenceConstants.LAYER_ARN_PYTHON, this.layerArnPythonTxt.getText());
@@ -247,7 +247,7 @@ public class BasePreferencePage extends PreferencePage {
         if (this.layerArnNodeJSTxt.getText().isEmpty()) {
             errors.add("・NodeJSのテレメトリーレイヤのARNが設定されていません。");
         } else {
-            if (!this.layerArnNodeJSTxt.getText().trim().startsWith("arn:aws:lambda:")) {
+            if (!this.layerArnNodeJSTxt.getText().trim().startsWith("arn:aws:lambda:")) { //$NON-NLS-1$
                 errors.add("・LambdaのARNではないようです。");
             }
             ps.setValue(PreferenceConstants.LAYER_ARN_NODEJS, this.layerArnNodeJSTxt.getText());
