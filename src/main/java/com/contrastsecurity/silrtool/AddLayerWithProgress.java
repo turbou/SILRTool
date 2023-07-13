@@ -56,7 +56,7 @@ public class AddLayerWithProgress extends LayerWithProgress {
             if (monitor.isCanceled()) {
                 throw new InterruptedException("キャンセルされました。");
             }
-            monitor.setTaskName(func.getName());
+            monitor.setTaskName(String.format("%s (%d/%d)", func.getName(), this.funcs.indexOf(func) + 1, this.funcs.size()));
             // SubProgressMonitor sub1Monitor = new SubProgressMonitor(monitor, 100);
             EnvironmentResponse envRes = func.getConfig().environment();
             Map<String, String> valueMap = envRes.variables();

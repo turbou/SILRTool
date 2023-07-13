@@ -55,7 +55,7 @@ public class RmvLayerWithProgress extends LayerWithProgress {
             if (monitor.isCanceled()) {
                 throw new InterruptedException("キャンセルされました。");
             }
-            monitor.setTaskName(func.getName());
+            monitor.setTaskName(String.format("%s (%d/%d)", func.getName(), this.funcs.indexOf(func) + 1, this.funcs.size()));
             EnvironmentResponse envRes = func.getConfig().environment();
             Map<String, String> valueMap = envRes.variables();
             Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
