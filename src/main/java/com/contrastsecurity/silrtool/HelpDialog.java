@@ -45,7 +45,10 @@ public class HelpDialog extends Dialog {
     @Override
     protected Control createDialogArea(Composite parent) {
         Composite composite = (Composite) super.createDialogArea(parent);
-        composite.setLayout(new GridLayout(2, false));
+        GridLayout compositeLt = new GridLayout(2, false);
+        compositeLt.marginHeight = 15;
+        compositeLt.marginWidth = 15;
+        composite.setLayout(compositeLt);
         Text text = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
         text.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
         text.setLayoutData(new GridData(GridData.FILL_BOTH));
