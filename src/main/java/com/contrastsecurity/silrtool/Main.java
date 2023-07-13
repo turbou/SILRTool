@@ -94,10 +94,20 @@ public class Main {
     private Button rmvLayerBtn;
     private Button settingsBtn;
 
+    private ColumnOrder column2Order;
+    private ColumnOrder column3Order;
+    private ColumnOrder column4Order;
+
     private PreferenceStore ps;
     private PreferenceDialog preferenceDialog;
 
     private Map<String, LambdaFunction> fullFuncMap;
+
+    public enum ColumnOrder {
+        ASC,
+        DESC,
+        NONE
+    }
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -303,12 +313,68 @@ public class Main {
         TableColumn column2 = new TableColumn(table, SWT.LEFT);
         column2.setWidth(300);
         column2.setText("関数名");
+        column2Order = ColumnOrder.ASC;
+        column2.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                if (column2Order == ColumnOrder.DESC || column2Order == ColumnOrder.NONE) {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getName)).collect(Collectors.toList());
+                    column2Order = ColumnOrder.ASC;
+                    column3Order = ColumnOrder.NONE;
+                    column4Order = ColumnOrder.NONE;
+                } else {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getName).reversed()).collect(Collectors.toList());
+                    column2Order = ColumnOrder.DESC;
+                    column3Order = ColumnOrder.NONE;
+                    column4Order = ColumnOrder.NONE;
+                }
+                updateTable();
+            }
+        });
+
         TableColumn column3 = new TableColumn(table, SWT.CENTER);
         column3.setWidth(60);
         column3.setText("Contrast");
+        column3Order = ColumnOrder.NONE;
+        column3.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                if (column3Order == ColumnOrder.DESC || column3Order == ColumnOrder.NONE) {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::hasContrastLayerStr)).collect(Collectors.toList());
+                    column2Order = ColumnOrder.NONE;
+                    column3Order = ColumnOrder.ASC;
+                    column4Order = ColumnOrder.NONE;
+                } else {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::hasContrastLayerStr).reversed()).collect(Collectors.toList());
+                    column2Order = ColumnOrder.NONE;
+                    column3Order = ColumnOrder.DESC;
+                    column4Order = ColumnOrder.NONE;
+                }
+                updateTable();
+            }
+        });
+
         TableColumn column4 = new TableColumn(table, SWT.LEFT);
         column4.setWidth(120);
         column4.setText("ランタイム");
+        column4Order = ColumnOrder.NONE;
+        column4.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                if (column4Order == ColumnOrder.DESC || column4Order == ColumnOrder.NONE) {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getRuntime)).collect(Collectors.toList());
+                    column2Order = ColumnOrder.NONE;
+                    column3Order = ColumnOrder.NONE;
+                    column4Order = ColumnOrder.ASC;
+                } else {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getRuntime).reversed()).collect(Collectors.toList());
+                    column2Order = ColumnOrder.NONE;
+                    column3Order = ColumnOrder.NONE;
+                    column4Order = ColumnOrder.DESC;
+                }
+                updateTable();
+            }
+        });
 
         Composite buttonGrp = new Composite(funcTableGrp, SWT.NONE);
         GridData buttonGrpGrDt = new GridData(GridData.FILL_VERTICAL);
@@ -547,6 +613,19 @@ public class Main {
         item.setText(2, org.getName());
         item.setText(3, org.hasContrastLayerStr());
         item.setText(4, org.getRuntime());
+    }
+
+    public void updateTable() {
+        for (Button button : checkBoxList) {
+            button.dispose();
+        }
+        checkBoxList.clear();
+        table.clearAll();
+        table.removeAll();
+        for (LambdaFunction func : funcList) {
+            addFuncToTable(func);
+        }
+        funcCount.setText(String.valueOf(funcList.size()));
     }
 
     public void listFunctions() {
