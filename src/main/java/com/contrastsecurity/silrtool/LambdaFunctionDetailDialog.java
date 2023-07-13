@@ -106,11 +106,13 @@ public class LambdaFunctionDetailDialog extends Dialog {
         envCol2.setWidth(400);
         envCol2.setText("値");
         EnvironmentResponse envRes = func.getLatestEnvironment();
-        envRes.variables().forEach((k, v) -> {
-            TableItem item = new TableItem(envTable, SWT.CENTER);
-            item.setText(0, k);
-            item.setText(1, v);
-        });
+        if (envRes != null) {
+            envRes.variables().forEach((k, v) -> {
+                TableItem item = new TableItem(envTable, SWT.CENTER);
+                item.setText(0, k);
+                item.setText(1, v);
+            });
+        }
         envTabItem.setControl(envShell);
 
         return composite;
