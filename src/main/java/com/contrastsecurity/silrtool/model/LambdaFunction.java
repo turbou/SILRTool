@@ -62,24 +62,24 @@ public class LambdaFunction {
 
     public String hasContrastLayerStr() {
         if (this.hasContrastLayer()) {
-            return "Y";
+            return "Y"; //$NON-NLS-1$
         } else {
-            return "N";
+            return "N"; //$NON-NLS-1$
         }
     }
 
     public boolean hasContrastLayer() {
         if (this.response != null) {
             for (Layer layer : this.response.layers()) {
-                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-                if (layerName.startsWith("contrast-instrumentation-extension")) {
+                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
+                if (layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
                     return true;
                 }
             }
         } else {
             for (Layer layer : this.config.layers()) {
-                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-                if (layerName.startsWith("contrast-instrumentation-extension")) {
+                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
+                if (layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
                     return true;
                 }
             }

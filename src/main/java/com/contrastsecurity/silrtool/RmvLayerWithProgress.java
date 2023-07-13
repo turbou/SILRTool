@@ -50,28 +50,28 @@ public class RmvLayerWithProgress extends LayerWithProgress {
 
     @Override
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-        monitor.beginTask("レイヤー削除", this.funcs.size());
+        monitor.beginTask(Messages.getString("rmvlayerwithprogress.taskname"), this.funcs.size()); //$NON-NLS-1$
         for (LambdaFunction func : this.funcs) {
             if (monitor.isCanceled()) {
-                throw new InterruptedException("キャンセルされました。");
+                throw new InterruptedException(Messages.getString("layerwithprogress.progress.canceled")); //$NON-NLS-1$
             }
-            monitor.setTaskName(String.format("%s (%d/%d)", func.getName(), this.funcs.indexOf(func) + 1, this.funcs.size()));
+            monitor.setTaskName(String.format("%s (%d/%d)", func.getName(), this.funcs.indexOf(func) + 1, this.funcs.size())); //$NON-NLS-1$
             EnvironmentResponse envRes = func.getConfig().environment();
             Map<String, String> valueMap = envRes.variables();
             Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
-            if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) {
-                valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER");
+            if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) { //$NON-NLS-1$
+                valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER"); //$NON-NLS-1$
             }
-            if (valueMap2.containsKey("CONTRAST_BUCKET")) {
-                valueMap2.remove("CONTRAST_BUCKET");
+            if (valueMap2.containsKey("CONTRAST_BUCKET")) { //$NON-NLS-1$
+                valueMap2.remove("CONTRAST_BUCKET"); //$NON-NLS-1$
             }
             Environment environment = Environment.builder().variables(valueMap2).build();
 
             List<Layer> layers = func.getConfig().layers();
             List<String> layerArns = new ArrayList<String>();
             for (Layer layer : layers) {
-                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-                if (!layerName.startsWith("contrast-instrumentation-extension")) {
+                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
+                if (!layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
                     layerArns.add(layer.arn());
                 }
             }

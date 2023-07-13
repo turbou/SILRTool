@@ -67,7 +67,7 @@ public abstract class LayerWithProgress implements IRunnableWithProgress {
         }
         SdkHttpClient httpClient = null;
         if (ps.getBoolean(PreferenceConstants.PROXY_YUKO)) {
-            String proxyHostPort = String.format("%s:%s", ps.getString(PreferenceConstants.PROXY_HOST), ps.getString(PreferenceConstants.PROXY_PORT));
+            String proxyHostPort = String.format("%s:%s", ps.getString(PreferenceConstants.PROXY_HOST), ps.getString(PreferenceConstants.PROXY_PORT)); //$NON-NLS-1$
             ProxyConfiguration.Builder proxyBuilder = ProxyConfiguration.builder();
             proxyBuilder.endpoint(URI.create(proxyHostPort));
             if (!this.ps.getString(PreferenceConstants.PROXY_AUTH).equals("none")) { //$NON-NLS-1$
@@ -83,7 +83,7 @@ public abstract class LayerWithProgress implements IRunnableWithProgress {
                         proxyBuilder.username(ps.getString(PreferenceConstants.PROXY_USER));
                         proxyBuilder.password(proxy_pass);
                     } catch (Exception e) {
-                        throw new Exception("プロキシパスワードの復号化に失敗しました。\\r\\nパスワードの設定をやり直してください。");
+                        throw new Exception(Messages.getString("layerwithprogress.proxy.password.decrypt.error")); //$NON-NLS-1$
                     }
                 }
             }

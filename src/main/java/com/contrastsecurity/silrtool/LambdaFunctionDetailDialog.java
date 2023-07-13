@@ -73,7 +73,7 @@ public class LambdaFunctionDetailDialog extends Dialog {
                 new int[] { 100 }, true);
 
         CTabItem layerTabItem = new CTabItem(tabFolder, SWT.NONE);
-        layerTabItem.setText("レイヤー");
+        layerTabItem.setText(Messages.getString("lambdafunctiondetaildialog.tabitem.title.layer")); //$NON-NLS-1$
         Composite layerShell = new Composite(tabFolder, SWT.NONE);
         layerShell.setLayout(new GridLayout(1, false));
         Table layerTable = new Table(layerShell, SWT.BORDER);
@@ -83,7 +83,7 @@ public class LambdaFunctionDetailDialog extends Dialog {
         layerTable.setHeaderVisible(true);
         TableColumn layerCol1 = new TableColumn(layerTable, SWT.LEFT);
         layerCol1.setWidth(800);
-        layerCol1.setText("ARN");
+        layerCol1.setText(Messages.getString("lambdafunctiondetaildialog.table.layer.column.arn.title")); //$NON-NLS-1$
         for (Layer layer : this.func.getLatestLayers()) {
             TableItem item = new TableItem(layerTable, SWT.LEFT);
             item.setText(0, layer.arn());
@@ -91,7 +91,7 @@ public class LambdaFunctionDetailDialog extends Dialog {
         layerTabItem.setControl(layerShell);
 
         CTabItem envTabItem = new CTabItem(tabFolder, SWT.NONE);
-        envTabItem.setText("環境変数");
+        envTabItem.setText(Messages.getString("lambdafunctiondetaildialog.tabitem.title.env")); //$NON-NLS-1$
         Composite envShell = new Composite(tabFolder, SWT.NONE);
         envShell.setLayout(new GridLayout(1, false));
         Table envTable = new Table(envShell, SWT.BORDER);
@@ -101,10 +101,10 @@ public class LambdaFunctionDetailDialog extends Dialog {
         envTable.setHeaderVisible(true);
         TableColumn envCol1 = new TableColumn(envTable, SWT.LEFT);
         envCol1.setWidth(400);
-        envCol1.setText("変数名");
+        envCol1.setText(Messages.getString("lambdafunctiondetaildialog.table.env.column.key.title")); //$NON-NLS-1$
         TableColumn envCol2 = new TableColumn(envTable, SWT.LEFT);
         envCol2.setWidth(400);
-        envCol2.setText("値");
+        envCol2.setText(Messages.getString("lambdafunctiondetaildialog.table.env.column.val.title")); //$NON-NLS-1$
         EnvironmentResponse envRes = func.getLatestEnvironment();
         if (envRes != null) {
             envRes.variables().forEach((k, v) -> {
@@ -137,7 +137,7 @@ public class LambdaFunctionDetailDialog extends Dialog {
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
-        newShell.setText(String.format("%s", this.func.getName()));
+        newShell.setText(String.format("%s", this.func.getName())); //$NON-NLS-1$
     }
 
 }

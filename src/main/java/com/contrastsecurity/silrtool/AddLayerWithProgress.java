@@ -51,43 +51,43 @@ public class AddLayerWithProgress extends LayerWithProgress {
 
     @Override
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-        monitor.beginTask("レイヤー登録", this.funcs.size()); //$NON-NLS-1$
+        monitor.beginTask(Messages.getString("addlayerwithprogress.taskname"), this.funcs.size()); //$NON-NLS-1$
         for (LambdaFunction func : this.funcs) {
             if (monitor.isCanceled()) {
-                throw new InterruptedException("キャンセルされました。");
+                throw new InterruptedException(Messages.getString("layerwithprogress.progress.canceled")); //$NON-NLS-1$
             }
-            monitor.setTaskName(String.format("%s (%d/%d)", func.getName(), this.funcs.indexOf(func) + 1, this.funcs.size()));
+            monitor.setTaskName(String.format("%s (%d/%d)", func.getName(), this.funcs.indexOf(func) + 1, this.funcs.size())); //$NON-NLS-1$
             // SubProgressMonitor sub1Monitor = new SubProgressMonitor(monitor, 100);
             EnvironmentResponse envRes = func.getConfig().environment();
             Map<String, String> valueMap = envRes.variables();
             Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
-            if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) {
-                String value = valueMap2.get("AWS_LAMBDA_EXEC_WRAPPER");
+            if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) { //$NON-NLS-1$
+                String value = valueMap2.get("AWS_LAMBDA_EXEC_WRAPPER"); //$NON-NLS-1$
                 if (value.equals(ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER))) {
-                    System.out.println("there is already a wrapper on this function ... skipping");
+                    System.out.println(Messages.getString("addlayerwithprogress.1")); //$NON-NLS-1$
                 } else {
-                    valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER");
+                    valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER"); //$NON-NLS-1$
                 }
             }
-            valueMap2.putIfAbsent("AWS_LAMBDA_EXEC_WRAPPER", ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER));
-            valueMap2.putIfAbsent("CONTRAST_BUCKET", ps.getString(PreferenceConstants.ENV_S3_BUCKET));
+            valueMap2.putIfAbsent("AWS_LAMBDA_EXEC_WRAPPER", ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER)); //$NON-NLS-1$
+            valueMap2.putIfAbsent("CONTRAST_BUCKET", ps.getString(PreferenceConstants.ENV_S3_BUCKET)); //$NON-NLS-1$
             Environment environment = Environment.builder().variables(valueMap2).build();
             // sub1Monitor.worked(15);
 
             List<Layer> layers = func.getConfig().layers();
             List<String> layerArns = new ArrayList<String>();
             for (Layer layer : layers) {
-                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2];
-                if (!layerName.startsWith("contrast-instrumentation-extension")) {
+                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
+                if (!layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
                     layerArns.add(layer.arn());
                 }
             }
-            if (func.getRuntime().toLowerCase().startsWith("nodejs")) {
+            if (func.getRuntime().toLowerCase().startsWith("nodejs")) { //$NON-NLS-1$
                 layerArns.add(ps.getString(PreferenceConstants.LAYER_ARN_NODEJS));
-            } else if (func.getRuntime().toLowerCase().startsWith("python")) {
+            } else if (func.getRuntime().toLowerCase().startsWith("python")) { //$NON-NLS-1$
                 layerArns.add(ps.getString(PreferenceConstants.LAYER_ARN_PYTHON));
             } else {
-                System.out.println(String.format("Layer not found for runtime %s", func.getRuntime()));
+                System.out.println(String.format(Messages.getString("addlayerwithprogress.2"), func.getRuntime())); //$NON-NLS-1$
             }
             try {
                 UpdateFunctionConfigurationResponse response = updateFunctionConfiguration(func.getName(), environment, layerArns);
