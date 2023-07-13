@@ -418,6 +418,7 @@ public class Main {
                     }
                 }
                 if (targetFuncs.isEmpty()) {
+                    MessageDialog.openInformation(shell, "レイヤー登録", "レイヤーを登録する関数にチェックを入れてください。");
                     return;
                 }
                 LayerWithProgress progress = new AddLayerWithProgress(shell, ps, targetFuncs);
@@ -449,6 +450,7 @@ public class Main {
                     }
                 }
                 if (targetFuncs.isEmpty()) {
+                    MessageDialog.openInformation(shell, "レイヤー削除", "レイヤーを削除する関数にチェックを入れてください。");
                     return;
                 }
                 LayerWithProgress progress = new RmvLayerWithProgress(shell, ps, targetFuncs);
