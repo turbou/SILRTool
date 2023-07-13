@@ -84,7 +84,7 @@ public class HelpDialog extends Dialog {
 
     @Override
     protected void setShellStyle(int newShellStyle) {
-        super.setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.RESIZE | SWT.APPLICATION_MODAL);
+        super.setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.RESIZE);
     }
 
     @Override
