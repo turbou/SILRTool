@@ -84,7 +84,6 @@ public class Main {
     private Button funcLoadBtn;
     private List<LambdaFunction> funcList;
     private List<Button> checkBoxList = new ArrayList<Button>();
-    private List<Integer> selectedIdxes = new ArrayList<Integer>();
     private Text funcListFilter;
     private Label funcCount;
     private Table table;
@@ -390,11 +389,6 @@ public class Main {
                 for (LambdaFunction org : funcList) {
                     org.setValid(true);
                 }
-                selectedIdxes.clear();
-                for (Button button : checkBoxList) {
-                    button.setSelection(true);
-                    selectedIdxes.add(checkBoxList.indexOf(button));
-                }
             }
         });
 
@@ -406,10 +400,6 @@ public class Main {
             public void widgetSelected(SelectionEvent e) {
                 for (LambdaFunction org : funcList) {
                     org.setValid(false);
-                }
-                selectedIdxes.clear();
-                for (Button button : checkBoxList) {
-                    button.setSelection(false);
                 }
             }
         });
@@ -587,8 +577,8 @@ public class Main {
         item.setText(3, func.hasContrastLayerStr());
     }
 
-    private void addFuncToTable(LambdaFunction org) {
-        if (org == null) {
+    private void addFuncToTable(LambdaFunction func) {
+        if (func == null) {
             return;
         }
         TableEditor editor = new TableEditor(table);
@@ -596,23 +586,21 @@ public class Main {
         button.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                selectedIdxes.clear();
-                for (Button button : checkBoxList) {
-                    if (button.getSelection()) {
-                        selectedIdxes.add(checkBoxList.indexOf(button));
-                    }
-                }
+                Button btn = (Button) e.getSource();
+                LambdaFunction checkedFunc = funcList.get(checkBoxList.indexOf(btn));
+                checkedFunc.setValid(button.getSelection());
             }
         });
+        button.setSelection(func.isValid());
         button.pack();
         TableItem item = new TableItem(table, SWT.CENTER);
         editor.minimumWidth = button.getSize().x;
         editor.horizontalAlignment = SWT.CENTER;
         editor.setEditor(button, item, 1);
         checkBoxList.add(button);
-        item.setText(2, org.getName());
-        item.setText(3, org.hasContrastLayerStr());
-        item.setText(4, org.getRuntime());
+        item.setText(2, func.getName());
+        item.setText(3, func.hasContrastLayerStr());
+        item.setText(4, func.getRuntime());
     }
 
     public void updateTable() {
