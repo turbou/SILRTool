@@ -20,7 +20,7 @@ public class MyPreferenceDialog extends PreferenceDialog {
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
-        newShell.setText(Messages.getString("mypreferencedialog.csvdltool.settings.title")); //$NON-NLS-1$
+        newShell.setText(Messages.getString("mypreferencedialog.silrtool.settings.title")); //$NON-NLS-1$
     }
 
     @Override

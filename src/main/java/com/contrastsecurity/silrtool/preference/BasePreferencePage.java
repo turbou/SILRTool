@@ -230,7 +230,7 @@ public class BasePreferencePage extends PreferencePage {
         }
 
         if (this.regionCombo.getText().isEmpty()) {
-            errors.add(Messages.getString("connectionpreferencepage.message.dialog.connection.timeout.empty.error.message")); //$NON-NLS-1$
+            errors.add("リージョン指定は必須です。");
         } else {
             ps.setValue(PreferenceConstants.REGION, this.regionCombo.getText());
         }

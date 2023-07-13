@@ -43,7 +43,7 @@ import com.contrastsecurity.silrtool.Messages;
 public class AboutPage extends PreferencePage {
 
     public AboutPage() {
-        super(Messages.getString("aboutpage.about.csvdltool")); //$NON-NLS-1$
+        super(Messages.getString("aboutpage.about.silrtool")); //$NON-NLS-1$
     }
 
     @Override

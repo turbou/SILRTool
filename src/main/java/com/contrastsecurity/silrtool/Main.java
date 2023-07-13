@@ -237,7 +237,7 @@ public class Main {
         funcLoadBtn = new Button(composite, SWT.PUSH);
         GC gc = new GC(funcLoadBtn);
         gc.setFont(bigFont);
-        Point bigBtnSize = gc.textExtent(Messages.getString("main.vul.export.button.title"));
+        Point bigBtnSize = gc.textExtent("関数の読み込み");
         gc.dispose();
         GridData funcLoadBtnGrDt = new GridData(GridData.FILL_HORIZONTAL);
         funcLoadBtnGrDt.minimumHeight = 36;
