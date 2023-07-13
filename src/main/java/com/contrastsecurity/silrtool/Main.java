@@ -93,6 +93,7 @@ public class Main {
     private Button rmvLayerBtn;
     private Button settingsBtn;
 
+    private ColumnOrder column1Order;
     private ColumnOrder column2Order;
     private ColumnOrder column3Order;
     private ColumnOrder column4Order;
@@ -306,9 +307,26 @@ public class Main {
         TableColumn column0 = new TableColumn(table, SWT.NONE);
         column0.setWidth(0);
         column0.setResizable(false);
+
         TableColumn column1 = new TableColumn(table, SWT.CENTER);
         column1.setWidth(50);
         column1.setText("");
+        column1Order = ColumnOrder.NONE;
+        column1.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                if (column1Order == ColumnOrder.DESC || column1Order == ColumnOrder.NONE) {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::isValid).reversed()).collect(Collectors.toList());
+                    column1Order = ColumnOrder.ASC;
+                } else {
+                    funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::isValid)).collect(Collectors.toList());
+                    column1Order = ColumnOrder.DESC;
+                }
+                column2Order = column3Order = column4Order = ColumnOrder.NONE;
+                updateTable();
+            }
+        });
+
         TableColumn column2 = new TableColumn(table, SWT.LEFT);
         column2.setWidth(300);
         column2.setText("関数名");
@@ -319,14 +337,11 @@ public class Main {
                 if (column2Order == ColumnOrder.DESC || column2Order == ColumnOrder.NONE) {
                     funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getName)).collect(Collectors.toList());
                     column2Order = ColumnOrder.ASC;
-                    column3Order = ColumnOrder.NONE;
-                    column4Order = ColumnOrder.NONE;
                 } else {
                     funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getName).reversed()).collect(Collectors.toList());
                     column2Order = ColumnOrder.DESC;
-                    column3Order = ColumnOrder.NONE;
-                    column4Order = ColumnOrder.NONE;
                 }
+                column1Order = column3Order = column4Order = ColumnOrder.NONE;
                 updateTable();
             }
         });
@@ -340,15 +355,12 @@ public class Main {
             public void handleEvent(Event event) {
                 if (column3Order == ColumnOrder.DESC || column3Order == ColumnOrder.NONE) {
                     funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::hasContrastLayerStr)).collect(Collectors.toList());
-                    column2Order = ColumnOrder.NONE;
                     column3Order = ColumnOrder.ASC;
-                    column4Order = ColumnOrder.NONE;
                 } else {
                     funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::hasContrastLayerStr).reversed()).collect(Collectors.toList());
-                    column2Order = ColumnOrder.NONE;
                     column3Order = ColumnOrder.DESC;
-                    column4Order = ColumnOrder.NONE;
                 }
+                column1Order = column2Order = column4Order = ColumnOrder.NONE;
                 updateTable();
             }
         });
@@ -362,15 +374,12 @@ public class Main {
             public void handleEvent(Event event) {
                 if (column4Order == ColumnOrder.DESC || column4Order == ColumnOrder.NONE) {
                     funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getRuntime)).collect(Collectors.toList());
-                    column2Order = ColumnOrder.NONE;
-                    column3Order = ColumnOrder.NONE;
                     column4Order = ColumnOrder.ASC;
                 } else {
                     funcList = funcList.stream().sorted(Comparator.comparing(LambdaFunction::getRuntime).reversed()).collect(Collectors.toList());
-                    column2Order = ColumnOrder.NONE;
-                    column3Order = ColumnOrder.NONE;
                     column4Order = ColumnOrder.DESC;
                 }
+                column1Order = column2Order = column3Order = ColumnOrder.NONE;
                 updateTable();
             }
         });
@@ -386,9 +395,10 @@ public class Main {
         bulkOnBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                for (LambdaFunction org : funcList) {
-                    org.setValid(true);
+                for (LambdaFunction func : funcList) {
+                    func.setValid(true);
                 }
+                updateTable();
             }
         });
 
@@ -398,9 +408,10 @@ public class Main {
         bulkOffBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                for (LambdaFunction org : funcList) {
-                    org.setValid(false);
+                for (LambdaFunction func : funcList) {
+                    func.setValid(false);
                 }
+                updateTable();
             }
         });
 
