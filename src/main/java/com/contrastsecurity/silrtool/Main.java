@@ -233,7 +233,7 @@ public class Main {
         GridData compositeGrDt = new GridData(GridData.FILL_BOTH);
         composite.setLayoutData(compositeGrDt);
 
-        Font bigFont = new Font(display, "Arial", 20, SWT.NORMAL);
+        Font bigFont = new Font(display, "Arial", 20, SWT.NORMAL); //$NON-NLS-1$
         funcLoadBtn = new Button(composite, SWT.PUSH);
         GC gc = new GC(funcLoadBtn);
         gc.setFont(bigFont);
@@ -310,7 +310,7 @@ public class Main {
 
         TableColumn column1 = new TableColumn(table, SWT.CENTER);
         column1.setWidth(50);
-        column1.setText("");
+        column1.setText(""); //$NON-NLS-1$
         column1Order = ColumnOrder.NONE;
         column1.addListener(SWT.Selection, new Listener() {
             @Override
@@ -630,7 +630,7 @@ public class Main {
     }
 
     public void listFunctions() {
-        funcListFilter.setText("");
+        funcListFilter.setText(""); //$NON-NLS-1$
         for (Button button : checkBoxList) {
             button.dispose();
         }
@@ -647,7 +647,7 @@ public class Main {
             }
             SdkHttpClient httpClient = null;
             if (ps.getBoolean(PreferenceConstants.PROXY_YUKO)) {
-                String proxyHostPort = String.format("%s:%s", ps.getString(PreferenceConstants.PROXY_HOST), ps.getString(PreferenceConstants.PROXY_PORT));
+                String proxyHostPort = String.format("%s:%s", ps.getString(PreferenceConstants.PROXY_HOST), ps.getString(PreferenceConstants.PROXY_PORT)); //$NON-NLS-1$
                 ProxyConfiguration.Builder proxyBuilder = ProxyConfiguration.builder();
                 proxyBuilder.endpoint(URI.create(proxyHostPort));
                 if (!this.ps.getString(PreferenceConstants.PROXY_AUTH).equals("none")) { //$NON-NLS-1$
@@ -693,7 +693,7 @@ public class Main {
             List<FunctionConfiguration> list = functionResult.functions();
             List<FunctionConfiguration> sorted = list.stream().sorted(Comparator.comparing(FunctionConfiguration::functionName)).collect(Collectors.toList());
             for (FunctionConfiguration config : sorted) {
-                if (config.functionName().toLowerCase().startsWith("contrast-")) {
+                if (config.functionName().toLowerCase().startsWith("contrast-")) { //$NON-NLS-1$
                     continue;
                 }
                 LambdaFunction func = new LambdaFunction(config);
