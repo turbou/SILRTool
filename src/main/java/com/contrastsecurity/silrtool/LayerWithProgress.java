@@ -83,7 +83,7 @@ public abstract class LayerWithProgress implements IRunnableWithProgress {
                         proxyBuilder.username(ps.getString(PreferenceConstants.PROXY_USER));
                         proxyBuilder.password(proxy_pass);
                     } catch (Exception e) {
-                        throw new Exception(Messages.getString("layerwithprogress.proxy.password.decrypt.error")); //$NON-NLS-1$
+                        throw new Exception(Messages.getString("proxy.password.decrypt.error")); //$NON-NLS-1$
                     }
                 }
             }

@@ -176,7 +176,7 @@ public class BasePreferencePage extends PreferencePage {
         GridData descLabelGrDt = new GridData(GridData.FILL_HORIZONTAL);
         descLabel.setLayoutData(descLabelGrDt);
         List<String> descLabelList = new ArrayList<String>();
-        descLabelList.add("Contrastサーバレスの設定タブで確認できます。");
+        descLabelList.add(Messages.getString("basepreferencepage.settings.hint.message")); //$NON-NLS-1$
         descLabel.setText(String.join("\r\n", descLabelList)); //$NON-NLS-1$
 
         Composite buttonGrp = new Composite(parent, SWT.NONE);
@@ -230,37 +230,37 @@ public class BasePreferencePage extends PreferencePage {
         }
 
         if (this.regionCombo.getText().isEmpty()) {
-            errors.add("リージョン指定は必須です。");
+            errors.add(Messages.getString("basepreferencepage.region.empty.error.message")); //$NON-NLS-1$
         } else {
             ps.setValue(PreferenceConstants.REGION, this.regionCombo.getText());
         }
 
         if (this.layerArnPythonTxt.getText().isEmpty()) {
-            errors.add("・PythonのテレメトリーレイヤのARNが設定されていません。");
+            errors.add(Messages.getString("basepreferencepage.layer.python.empty.error.message")); //$NON-NLS-1$
         } else {
             if (!this.layerArnPythonTxt.getText().trim().startsWith("arn:aws:lambda:")) { //$NON-NLS-1$
-                errors.add("・LambdaのARNではないようです。");
+                errors.add(Messages.getString("basepreferencepage.layer.python.notarn.error.message")); //$NON-NLS-1$
             }
             ps.setValue(PreferenceConstants.LAYER_ARN_PYTHON, this.layerArnPythonTxt.getText());
         }
 
         if (this.layerArnNodeJSTxt.getText().isEmpty()) {
-            errors.add("・NodeJSのテレメトリーレイヤのARNが設定されていません。");
+            errors.add(Messages.getString("basepreferencepage.layer.nodejs.empty.error.message")); //$NON-NLS-1$
         } else {
             if (!this.layerArnNodeJSTxt.getText().trim().startsWith("arn:aws:lambda:")) { //$NON-NLS-1$
-                errors.add("・LambdaのARNではないようです。");
+                errors.add(Messages.getString("basepreferencepage.layer.nodejs.notarn.error.message")); //$NON-NLS-1$
             }
             ps.setValue(PreferenceConstants.LAYER_ARN_NODEJS, this.layerArnNodeJSTxt.getText());
         }
 
         if (this.envExecWrapperTxt.getText().isEmpty()) {
-            errors.add("・AWS_LAMBDA_EXEC_WRAPPERの値が設定されていません。");
+            errors.add(Messages.getString("basepreferencepage.env.wrapper.empty.error.message")); //$NON-NLS-1$
         } else {
             ps.setValue(PreferenceConstants.ENV_EXEC_WRAPPER, this.envExecWrapperTxt.getText());
         }
 
         if (this.envS3BucketTxt.getText().isEmpty()) {
-            errors.add("・CONTRAST_BUCKETの値が設定されていません。");
+            errors.add(Messages.getString("basepreferencepage.env.bucket.empty.error.message")); //$NON-NLS-1$
         } else {
             ps.setValue(PreferenceConstants.ENV_S3_BUCKET, this.envS3BucketTxt.getText());
         }

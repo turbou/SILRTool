@@ -237,14 +237,14 @@ public class Main {
         funcLoadBtn = new Button(composite, SWT.PUSH);
         GC gc = new GC(funcLoadBtn);
         gc.setFont(bigFont);
-        Point bigBtnSize = gc.textExtent("関数の読み込み");
+        Point bigBtnSize = gc.textExtent(Messages.getString("main.button.load.function.title")); //$NON-NLS-1$
         gc.dispose();
         GridData funcLoadBtnGrDt = new GridData(GridData.FILL_HORIZONTAL);
         funcLoadBtnGrDt.minimumHeight = 36;
         funcLoadBtnGrDt.heightHint = bigBtnSize.y + 16;
         funcLoadBtnGrDt.horizontalSpan = 3;
         funcLoadBtn.setLayoutData(funcLoadBtnGrDt);
-        funcLoadBtn.setText("関数の読み込み");
+        funcLoadBtn.setText(Messages.getString("main.button.load.function.title")); //$NON-NLS-1$
         funcLoadBtn.setFont(new Font(display, "Arial", 16, SWT.NORMAL)); //$NON-NLS-1$
         funcLoadBtn.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -260,12 +260,12 @@ public class Main {
         funcTableGrp.setLayout(funcTableGrpLt);
         GridData funcTableGrpGrDt = new GridData(GridData.FILL_BOTH);
         funcTableGrp.setLayoutData(funcTableGrpGrDt);
-        funcTableGrp.setText("関数一覧");
+        funcTableGrp.setText(Messages.getString("main.function.table.group.title")); //$NON-NLS-1$
 
         funcListFilter = new Text(funcTableGrp, SWT.BORDER);
         GridData funcListFilterGrDt = new GridData(GridData.FILL_HORIZONTAL);
         funcListFilter.setLayoutData(funcListFilterGrDt);
-        funcListFilter.setMessage("フィルタ...");
+        funcListFilter.setMessage(Messages.getString("main.function.table.filter.text.message")); //$NON-NLS-1$
         funcListFilter.addModifyListener(new ModifyListener() {
             @Override
             public void modifyText(ModifyEvent event) {
@@ -293,7 +293,7 @@ public class Main {
         table.setMenu(menuTable);
 
         MenuItem miDetail = new MenuItem(menuTable, SWT.NONE);
-        miDetail.setText("詳細を見る");
+        miDetail.setText(Messages.getString("main.function.table.context.menuitem.detail.title")); //$NON-NLS-1$
         miDetail.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -329,7 +329,7 @@ public class Main {
 
         TableColumn column2 = new TableColumn(table, SWT.LEFT);
         column2.setWidth(300);
-        column2.setText("関数名");
+        column2.setText(Messages.getString("main.function.table.column.name.title")); //$NON-NLS-1$
         column2Order = ColumnOrder.ASC;
         column2.addListener(SWT.Selection, new Listener() {
             @Override
@@ -348,7 +348,7 @@ public class Main {
 
         TableColumn column3 = new TableColumn(table, SWT.CENTER);
         column3.setWidth(60);
-        column3.setText("Contrast");
+        column3.setText(Messages.getString("main.function.table.column.contrast.title")); //$NON-NLS-1$
         column3Order = ColumnOrder.NONE;
         column3.addListener(SWT.Selection, new Listener() {
             @Override
@@ -367,7 +367,7 @@ public class Main {
 
         TableColumn column4 = new TableColumn(table, SWT.LEFT);
         column4.setWidth(120);
-        column4.setText("ランタイム");
+        column4.setText(Messages.getString("main.function.table.column.runtime.title")); //$NON-NLS-1$
         column4Order = ColumnOrder.NONE;
         column4.addListener(SWT.Selection, new Listener() {
             @Override
@@ -391,7 +391,7 @@ public class Main {
 
         bulkOnBtn = new Button(buttonGrp, SWT.NULL);
         bulkOnBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        bulkOnBtn.setText("全て On");
+        bulkOnBtn.setText(Messages.getString("main.layer.allon.button.title")); //$NON-NLS-1$
         bulkOnBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -404,7 +404,7 @@ public class Main {
 
         bulkOffBtn = new Button(buttonGrp, SWT.NULL);
         bulkOffBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        bulkOffBtn.setText("全て Off");
+        bulkOffBtn.setText(Messages.getString("main.layer.alloff.button.title")); //$NON-NLS-1$
         bulkOffBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -417,7 +417,7 @@ public class Main {
 
         addLayerBtn = new Button(buttonGrp, SWT.NULL);
         addLayerBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        addLayerBtn.setText("レイヤー登録");
+        addLayerBtn.setText(Messages.getString("main.layer.add.button.title")); //$NON-NLS-1$
         addLayerBtn.setEnabled(false);
         addLayerBtn.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -429,11 +429,11 @@ public class Main {
                     }
                 }
                 if (targetFuncs.isEmpty()) {
-                    MessageDialog.openInformation(shell, "レイヤー登録", "レイヤーを登録する関数にチェックを入れてください。");
+                    MessageDialog.openInformation(shell, Messages.getString("main.layer.add.dialog.title"), Messages.getString("main.layer.add.selected.empty.message")); //$NON-NLS-1$ //$NON-NLS-2$
                     return;
                 }
                 LayerWithProgress progress = new AddLayerWithProgress(shell, ps, targetFuncs);
-                ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー登録");
+                ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, Messages.getString("main.layer.add.progress.dialog.title")); //$NON-NLS-1$
                 try {
                     progDialog.run(true, true, progress);
                 } catch (InvocationTargetException e) {
@@ -449,7 +449,7 @@ public class Main {
 
         rmvLayerBtn = new Button(buttonGrp, SWT.NULL);
         rmvLayerBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        rmvLayerBtn.setText("レイヤー削除");
+        rmvLayerBtn.setText(Messages.getString("main.layer.rmv.button.title")); //$NON-NLS-1$
         rmvLayerBtn.setEnabled(false);
         rmvLayerBtn.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -461,11 +461,11 @@ public class Main {
                     }
                 }
                 if (targetFuncs.isEmpty()) {
-                    MessageDialog.openInformation(shell, "レイヤー削除", "レイヤーを削除する関数にチェックを入れてください。");
+                    MessageDialog.openInformation(shell, Messages.getString("main.layer.rmv.dialog.title"), Messages.getString("main.layer.rmv.selected.empty.message")); //$NON-NLS-1$ //$NON-NLS-2$
                     return;
                 }
                 LayerWithProgress progress = new RmvLayerWithProgress(shell, ps, targetFuncs);
-                ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, "レイヤー削除");
+                ProgressMonitorDialog progDialog = new LayerProgressMonitorDialog(shell, Messages.getString("main.layer.rmv.progress.dialog.title")); //$NON-NLS-1$
                 try {
                     progDialog.run(true, true, progress);
                 } catch (InvocationTargetException e) {
@@ -483,7 +483,7 @@ public class Main {
         GridData settingsBtnGrDt = new GridData(GridData.FILL_BOTH);
         settingsBtnGrDt.verticalAlignment = SWT.BOTTOM;
         settingsBtn.setLayoutData(settingsBtnGrDt);
-        settingsBtn.setText("設定");
+        settingsBtn.setText(Messages.getString("main.settings.button.title")); //$NON-NLS-1$
         settingsBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent event) {
@@ -663,7 +663,7 @@ public class Main {
                             proxyBuilder.username(ps.getString(PreferenceConstants.PROXY_USER));
                             proxyBuilder.password(proxy_pass);
                         } catch (Exception e) {
-                            throw new Exception("プロキシパスワードの復号化に失敗しました。\\r\\nパスワードの設定をやり直してください。");
+                            throw new Exception(Messages.getString("proxy.password.decrypt.error")); //$NON-NLS-1$
                         }
                     }
                 }
@@ -706,7 +706,7 @@ public class Main {
             }
             funcCount.setText(String.valueOf(funcList.size()));
         } catch (Exception e) {
-            MessageDialog.openError(shell, "関数の読み込み", e.getMessage());
+            MessageDialog.openError(shell, Messages.getString("main.load.function.dialog.title"), e.getMessage()); //$NON-NLS-1$
         }
     }
 
