@@ -85,18 +85,18 @@ public class BasePreferencePage extends PreferencePage {
         GridData commonCompGrDt = new GridData(GridData.FILL_HORIZONTAL);
         commonComp.setLayoutData(commonCompGrDt);
 
-        new Label(commonComp, SWT.LEFT).setText("プロファイル:");
+        new Label(commonComp, SWT.LEFT).setText(Messages.getString("basepreferencepage.profile.label.title")); //$NON-NLS-1$
         profileNameTxt = new Text(commonComp, SWT.BORDER);
         profileNameTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         profileNameTxt.setText(ps.getString(PreferenceConstants.PROFILE_NAME));
-        profileNameTxt.setMessage("ブランクの場合、defaultプロファイルを使用します。");
+        profileNameTxt.setMessage(Messages.getString("basepreferencepage.profile.text.message")); //$NON-NLS-1$
         profileNameTxt.addListener(SWT.FocusIn, new Listener() {
             public void handleEvent(Event e) {
                 profileNameTxt.selectAll();
             }
         });
 
-        new Label(commonComp, SWT.LEFT).setText("リージョン:");
+        new Label(commonComp, SWT.LEFT).setText(Messages.getString("basepreferencepage.region.label.title")); //$NON-NLS-1$
         regionCombo = new Combo(commonComp, SWT.READ_ONLY);
         GridData regionComboGrDt = new GridData(GridData.FILL_HORIZONTAL);
         regionCombo.setLayoutData(regionComboGrDt);
@@ -117,7 +117,7 @@ public class BasePreferencePage extends PreferencePage {
         timeoutGrp.setLayout(timeoutGrpLt);
         GridData timeoutGrpGrDt = new GridData(GridData.FILL_HORIZONTAL);
         timeoutGrp.setLayoutData(timeoutGrpGrDt);
-        timeoutGrp.setText("ContrastテレメトリレイヤーARN");
+        timeoutGrp.setText(Messages.getString("basepreferencepage.contrast.layer.group.title")); //$NON-NLS-1$
 
         // ========== Python ========== //
         new Label(timeoutGrp, SWT.LEFT).setText("Python:"); //$NON-NLS-1$
@@ -148,7 +148,7 @@ public class BasePreferencePage extends PreferencePage {
         envGrp.setLayout(envGrpGrpLt);
         GridData envGrpGrDt = new GridData(GridData.FILL_HORIZONTAL);
         envGrp.setLayoutData(envGrpGrDt);
-        envGrp.setText("環境変数");
+        envGrp.setText(Messages.getString("basepreferencepage.contrast.env.group.title")); //$NON-NLS-1$
 
         // ========== AWS_LAMBDA_EXEC_WRAPPER ========== //
         new Label(envGrp, SWT.LEFT).setText("AWS_LAMBDA_EXEC_WRAPPER:"); //$NON-NLS-1$
