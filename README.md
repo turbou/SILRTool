@@ -28,11 +28,6 @@ There are several binaries on [Release](https://github.com/turbou/SILRTool/relea
   # Unzip command
   7z x SILRTool_X.X.X.cli7z
   ```
-#### About AuditLog Version
-As binaries above are Token authentication version.  
-Binaries which contains `auditlog` in file name are Password authentication version.  
-Authentication by Token authentication version is not recorded in audit log[^1], but Password authentication version is recorded in audit log.  
-Select which tool to use according to your situation.
 
 [^1]:Except for some environments.
 
@@ -104,7 +99,6 @@ Specify `com.contrastsecurity.csvdltool.Main` class and execute Java. SILRTool w
 1. run `jarpackage.sh`.  
     ```bash
     ./jarpackage.sh
-    ./jarpackage_auditlog.sh
     ```
     app folder will be created under `build\libs/bundle`.
 
@@ -132,12 +126,10 @@ First of all, get the certificate file(pfx) and the certificate password.
   Using codesign.  
   ```bash
   codesign --deep -s "Contrast Security, Inc." -v SILRTool_1.0.0.app
-  codesign --deep -s "Contrast Security, Inc." -v SILRTool_1.0.0_auditlog.app
   ```
 - Confirm Digital Signatures
   ```bash
   codesign -d --verbose=4 SILRTool_1.0.0.app
-  codesign -d --verbose=4 SILRTool_1.0.0_auditlog.app
   ```
     
 #### How to compress
@@ -149,6 +141,5 @@ First of all, get the certificate file(pfx) and the certificate password.
   brew install p7zip
   # Compress
   7z a SILRTool_1.0.0.cli7z SILRTool_1.0.0.app/
-  7z a SILRTool_1.0.0_auditlog.cli7z SILRTool_1.0.0_auditlog.app/
   ```
 

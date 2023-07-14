@@ -103,7 +103,6 @@ Eclipseでプロジェクトをリフレッシュすると、あとはJavaの実
 - jarpackage.shを実行します。
   ```bash
   ./jarpackage.sh
-  ./jarpackage_auditlog.sh
   ```
   build/libs/bundle下にappフォルダが作られます。
 
@@ -131,17 +130,14 @@ Eclipseでプロジェクトをリフレッシュすると、あとはJavaの実
 - 署名
   ```bash
   codesign --deep -s "Contrast Security, Inc." -v SILRTool_1.0.0.app
-  codesign --deep -s "Contrast Security, Inc." -v SILRTool_1.0.0_auditlog.app
   ```
 - 署名の確認
   ```bash
   codesign -d --verbose=4 SILRTool_1.0.0.app
-  codesign -d --verbose=4 SILRTool_1.0.0_auditlog.app
   ```
     
 #### 圧縮について補足
 - macOS
   ```bash
   7z a SILRTool_1.0.0.cli7z SILRTool_1.0.0.app/
-  7z a SILRTool_1.0.0_auditlog.cli7z SILRTool_1.0.0_auditlog.app/
   ```
