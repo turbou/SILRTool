@@ -123,7 +123,7 @@ First of all, get the certificate file(pfx) and the certificate password.
   Using sign4j in launch4j.  
   ```powershell
   cd C:\Program Files (x86)\launch4j\sign4j
-  sign4j.exe java -jar jsign-2.0.jar --alias 1 --keystore C:\Users\turbou\Desktop\SILRTool_work\XXXXX.pfx --storepass [] C:\Users\turbou\Desktop\SILRTool_work\common\SILRTool_1.0.0.exe
+  sign4j.exe java -jar jsign-2.0.jar --alias 1 --keystore C:\Users\turbou\Desktop\SILRTool_work\XXXXX.pfx --storepass [] C:\Users\turbou\Desktop\SILRTool_work\common\SILRTool_1.0.1.exe
   ```
 - Confirm Digital Signatures  
   You can confirm the signature in the properties of the exe file.
@@ -134,11 +134,11 @@ First of all, get the certificate file(pfx) and the certificate password.
 - Sign  
   Using codesign.  
   ```bash
-  codesign --deep -s "Contrast Security, Inc." -v SILRTool_1.0.0.app
+  codesign --deep -s "Contrast Security, Inc." -v SILRTool_1.0.1.app
   ```
 - Confirm Digital Signatures
   ```bash
-  codesign -d --verbose=4 SILRTool_1.0.0.app
+  codesign -d --verbose=4 SILRTool_1.0.1.app
   ```
     
 #### How to compress
@@ -149,6 +149,6 @@ First of all, get the certificate file(pfx) and the certificate password.
   # Installing p7zip
   brew install p7zip
   # Compress
-  7z a SILRTool_1.0.0.cli7z SILRTool_1.0.0.app/
+  7z a SILRTool_1.0.1.cli7z SILRTool_1.0.1.app/
   ```
 
