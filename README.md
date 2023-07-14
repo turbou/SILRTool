@@ -31,6 +31,15 @@ There are several binaries on [Release](https://github.com/turbou/SILRTool/relea
 
 [^1]:Except for some environments.
 
+## Prepare (For Your PC)
+Please create a AWS profile(following files) by `aws configure` or by hand.    
+- ~/.aws/config  
+  specify region and format.
+- ~/.aws/credentials  
+  Authentication info(token, secretkey)
+
+*Installing the AWS Cli is not required. If there is the above profile, it will work.*
+
 ## Settings
 1. Set the Region, Layer Arn and Environment in `General` preference page.
 
