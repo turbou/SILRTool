@@ -32,115 +32,119 @@ import software.amazon.awssdk.services.lambda.model.Layer;
 import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationResponse;
 
 public class LambdaFunction {
-    private String name;
-    private String runtime;
-    private boolean valid;
-    private FunctionConfiguration config;
-    private UpdateFunctionConfigurationResponse response;
+	private String name;
+	private String runtime;
+	private boolean valid;
+	private FunctionConfiguration config;
+	private UpdateFunctionConfigurationResponse response;
 
-    public LambdaFunction(FunctionConfiguration config) {
-        this.name = config.functionName();
-        this.runtime = config.runtimeAsString();
-        this.config = config;
-    }
+	public LambdaFunction(FunctionConfiguration config) {
+		this.name = config.functionName();
+		this.runtime = config.runtimeAsString();
+		this.config = config;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getRuntime() {
-        return runtime;
-    }
+	public String getRuntime() {
+		return runtime;
+	}
 
-    public void setRuntime(String runtime) {
-        this.runtime = runtime;
-    }
+	public void setRuntime(String runtime) {
+		this.runtime = runtime;
+	}
 
-    public String hasContrastLayerStr() {
-        if (this.hasContrastLayer()) {
-            return "Y"; //$NON-NLS-1$
-        } else {
-            return "N"; //$NON-NLS-1$
-        }
-    }
+	public String hasContrastLayerStr() {
+		if (this.hasContrastLayer()) {
+			return "Y"; //$NON-NLS-1$
+		} else {
+			return "N"; //$NON-NLS-1$
+		}
+	}
 
-    public boolean hasContrastLayer() {
-        if (this.response != null) {
-            for (Layer layer : this.response.layers()) {
-                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
-                if (layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
-                    return true;
-                }
-            }
-        } else {
-            for (Layer layer : this.config.layers()) {
-                String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
-                if (layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+	public boolean hasContrastLayer() {
+		if (this.response != null) {
+			for (Layer layer : this.response.layers()) {
+				String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
+				if (layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
+					return true;
+				}
+			}
+		} else {
+			for (Layer layer : this.config.layers()) {
+				String layerName = layer.arn().split(":")[layer.arn().split(":").length - 2]; //$NON-NLS-1$ //$NON-NLS-2$
+				if (layerName.startsWith("contrast-instrumentation-extension")) { //$NON-NLS-1$
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    public boolean isValid() {
-        return valid;
-    }
+	public int getLayerCount() {
+		return this.config.layers().size();
+	}
 
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
+	public boolean isValid() {
+		return valid;
+	}
 
-    public List<Layer> getLatestLayers() {
-        if (this.response != null) {
-            return this.response.layers();
-        } else {
-            return this.config.layers();
-        }
-    }
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
 
-    public EnvironmentResponse getLatestEnvironment() {
-        if (this.response != null) {
-            return this.response.environment();
-        } else {
-            return this.config.environment();
-        }
-    }
+	public List<Layer> getLatestLayers() {
+		if (this.response != null) {
+			return this.response.layers();
+		} else {
+			return this.config.layers();
+		}
+	}
 
-    public FunctionConfiguration getConfig() {
-        return config;
-    }
+	public EnvironmentResponse getLatestEnvironment() {
+		if (this.response != null) {
+			return this.response.environment();
+		} else {
+			return this.config.environment();
+		}
+	}
 
-    public void setConfig(FunctionConfiguration config) {
-        this.config = config;
-    }
+	public FunctionConfiguration getConfig() {
+		return config;
+	}
 
-    public UpdateFunctionConfigurationResponse getResponse() {
-        return response;
-    }
+	public void setConfig(FunctionConfiguration config) {
+		this.config = config;
+	}
 
-    public void setResponse(UpdateFunctionConfigurationResponse response) {
-        this.response = response;
-    }
+	public UpdateFunctionConfigurationResponse getResponse() {
+		return response;
+	}
 
-    @Override
-    public String toString() {
-        List<String> strList = new ArrayList<String>();
-        strList.add("name: " + this.name); //$NON-NLS-1$
-        return String.join(", ", strList); //$NON-NLS-1$
-    }
+	public void setResponse(UpdateFunctionConfigurationResponse response) {
+		this.response = response;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof LambdaFunction) {
-            LambdaFunction other = (LambdaFunction) obj;
-            return other.name.equals(this.name);
-        }
-        return false;
-    }
+	@Override
+	public String toString() {
+		List<String> strList = new ArrayList<String>();
+		strList.add("name: " + this.name); //$NON-NLS-1$
+		return String.join(", ", strList); //$NON-NLS-1$
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof LambdaFunction) {
+			LambdaFunction other = (LambdaFunction) obj;
+			return other.name.equals(this.name);
+		}
+		return false;
+	}
 
 }

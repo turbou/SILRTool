@@ -23,12 +23,16 @@
 
 package com.contrastsecurity.silrtool;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.widgets.Shell;
@@ -44,6 +48,8 @@ import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationR
 
 public class RmvLayerWithProgress extends LayerWithProgress {
 
+    Logger logger = LogManager.getLogger("silrtool"); //$NON-NLS-1$
+
     public RmvLayerWithProgress(Shell shell, PreferenceStore ps, List<LambdaFunction> funcs) {
         super(shell, ps, funcs);
     }
@@ -57,8 +63,13 @@ public class RmvLayerWithProgress extends LayerWithProgress {
             }
             monitor.setTaskName(String.format("%s (%d/%d)", func.getName(), this.funcs.indexOf(func) + 1, this.funcs.size())); //$NON-NLS-1$
             EnvironmentResponse envRes = func.getConfig().environment();
-            Map<String, String> valueMap = envRes.variables();
-            Map<String, String> valueMap2 = new HashMap<String, String>(valueMap);
+            Map<String, String> valueMap2 = null;
+            if (envRes != null) {
+                Map<String, String> valueMap = envRes.variables();
+                valueMap2 = new HashMap<String, String>(valueMap);
+            } else {
+                valueMap2 = new HashMap<String, String>();
+            }
             if (valueMap2.containsKey("AWS_LAMBDA_EXEC_WRAPPER")) { //$NON-NLS-1$
                 valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER"); //$NON-NLS-1$
             }
@@ -85,9 +96,19 @@ public class RmvLayerWithProgress extends LayerWithProgress {
                     }
                 });
             } catch (LambdaException e) {
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(stringWriter);
+                e.printStackTrace(printWriter);
+                String trace = stringWriter.toString();
+                logger.error(trace);
                 throw new InvocationTargetException(new SILRLambdaException(func.getName(), e));
             } catch (Exception e) {
-                e.printStackTrace();
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(stringWriter);
+                e.printStackTrace(printWriter);
+                String trace = stringWriter.toString();
+                logger.error(trace);
+                throw new InvocationTargetException(e);
             }
             monitor.worked(1);
             Thread.sleep(500);

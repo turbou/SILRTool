@@ -69,6 +69,7 @@ import software.amazon.awssdk.services.lambda.LambdaClient;
 import software.amazon.awssdk.services.lambda.LambdaClientBuilder;
 import software.amazon.awssdk.services.lambda.model.FunctionConfiguration;
 import software.amazon.awssdk.services.lambda.model.ListFunctionsResponse;
+import software.amazon.awssdk.services.lambda.paginators.ListFunctionsIterable;
 import software.amazon.awssdk.utils.AttributeMap;
 
 public class Main {
@@ -384,6 +385,10 @@ public class Main {
             }
         });
 
+        TableColumn column5 = new TableColumn(table, SWT.LEFT);
+        column5.setWidth(90);
+        column5.setText(Messages.getString("main.function.table.column.layer_count.title")); //$NON-NLS-1$
+
         Composite buttonGrp = new Composite(funcTableGrp, SWT.NONE);
         GridData buttonGrpGrDt = new GridData(GridData.FILL_VERTICAL);
         buttonGrp.setLayoutData(buttonGrpGrDt);
@@ -461,7 +466,8 @@ public class Main {
                     }
                 }
                 if (targetFuncs.isEmpty()) {
-                    MessageDialog.openInformation(shell, Messages.getString("main.layer.rmv.dialog.title"), Messages.getString("main.layer.rmv.selected.empty.message")); //$NON-NLS-1$ //$NON-NLS-2$
+                    MessageDialog.openInformation(shell, Messages.getString("main.layer.rmv.dialog.title"), //$NON-NLS-1$
+                            Messages.getString("main.layer.rmv.selected.empty.message")); //$NON-NLS-1$
                     return;
                 }
                 LayerWithProgress progress = new RmvLayerWithProgress(shell, ps, targetFuncs);
@@ -614,6 +620,7 @@ public class Main {
         item.setText(2, func.getName());
         item.setText(3, func.hasContrastLayerStr());
         item.setText(4, func.getRuntime());
+        item.setText(5, String.valueOf(func.getLayerCount()));
     }
 
     public void updateTable() {
@@ -647,7 +654,8 @@ public class Main {
             }
             SdkHttpClient httpClient = null;
             if (ps.getBoolean(PreferenceConstants.PROXY_YUKO)) {
-                String proxyHostPort = String.format("%s:%s", ps.getString(PreferenceConstants.PROXY_HOST), ps.getString(PreferenceConstants.PROXY_PORT)); //$NON-NLS-1$
+                String proxyHostPort = String.format("%s:%s", ps.getString(PreferenceConstants.PROXY_HOST), //$NON-NLS-1$
+                        ps.getString(PreferenceConstants.PROXY_PORT));
                 ProxyConfiguration.Builder proxyBuilder = ProxyConfiguration.builder();
                 proxyBuilder.endpoint(URI.create(proxyHostPort));
                 if (!this.ps.getString(PreferenceConstants.PROXY_AUTH).equals("none")) { //$NON-NLS-1$
@@ -689,16 +697,18 @@ public class Main {
                 clientBuilder.httpClient(httpClient);
             }
             LambdaClient awsLambda = clientBuilder.build();
-            ListFunctionsResponse functionResult = awsLambda.listFunctions();
-            List<FunctionConfiguration> list = functionResult.functions();
-            List<FunctionConfiguration> sorted = list.stream().sorted(Comparator.comparing(FunctionConfiguration::functionName)).collect(Collectors.toList());
-            for (FunctionConfiguration config : sorted) {
-                if (config.functionName().toLowerCase().startsWith("contrast-")) { //$NON-NLS-1$
-                    continue;
+            ListFunctionsIterable responses = awsLambda.listFunctionsPaginator();
+            for (ListFunctionsResponse functionResult : responses) {
+                List<FunctionConfiguration> list = functionResult.functions();
+                List<FunctionConfiguration> sorted = list.stream().sorted(Comparator.comparing(FunctionConfiguration::functionName)).collect(Collectors.toList());
+                for (FunctionConfiguration config : sorted) {
+                    if (config.functionName().toLowerCase().startsWith("contrast-")) { //$NON-NLS-1$
+                        continue;
+                    }
+                    LambdaFunction func = new LambdaFunction(config);
+                    funcList.add(func);
+                    fullFuncMap.put(func.getName(), func);
                 }
-                LambdaFunction func = new LambdaFunction(config);
-                funcList.add(func);
-                fullFuncMap.put(func.getName(), func);
             }
             awsLambda.close();
             for (LambdaFunction func : funcList) {
