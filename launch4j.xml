@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\turbou\Desktop\SILRTool_work\common\SILRTool-1.0.3.jar</jar>
+  <jar>C:\Users\turbou\git\SILRTool\build\libs\SILRTool-1.0.3.jar</jar>
   <outfile>C:\Users\turbou\Desktop\SILRTool_work\common\SILRTool_1.0.3.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
