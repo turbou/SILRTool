@@ -12,13 +12,13 @@ jpackage \
   --input build/libs \
   --dest build/ \
   --main-jar ${APP_NAME}-${APP_VERSION}.jar \
-  --main-class com.contrastsecurity.csvdltool.Main \
+  --main-class com.contrastsecurity.silrtool.Main \
   --java-options -XstartOnFirstThread \
   --java-options -Xms128m \
   --java-options -Xmx256m \
   --java-options "--add-opens java.base/java.time.format=ALL-UNNAMED" \
   --java-options "--add-opens java.base/java.util.regex=ALL-UNNAMED" \
-  --icon src/main/resources/csvdltool.icns \
+  --icon src/main/resources/silrtool.icns \
   --vendor "Contrast Security Japan G.K." \
   --copyright "Copyright (c) 2023 Contrast Security Japan G.K."
 
