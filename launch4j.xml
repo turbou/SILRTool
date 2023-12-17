@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\turbou\Desktop\SILRTool_work\common\SILRTool-1.0.3.jar</jar>
+  <outfile>C:\Users\turbou\Desktop\SILRTool_work\common\SILRTool_1.0.3.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\turbou\Desktop\SILRTool_work\contrastsecurity.ico</icon>
+  <jre>
+    <path>jre17-min</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>true</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+    <initialHeapSize>128</initialHeapSize>
+    <maxHeapSize>256</maxHeapSize>
+    <opt>--add-opens java.base/java.time.format=ALL-UNNAMED</opt>
+    <opt>--add-opens java.base/java.util.regex=ALL-UNNAMED</opt>
+  </jre>
+</launch4jConfig>
