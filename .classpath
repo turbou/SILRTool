@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="output" path="bin/default"/>
 	<classpathentry output="bin/main" kind="src" path="src/main/java">
 		<attributes>
 			<attribute name="gradle_scope" value="main"/>
@@ -12,8 +13,7 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="bin/default"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/s3/2.20.90/b496e98fe4001ddf69df9139a8d7bf0e1475d64a/s3-2.20.90-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.awssdk/s3/2.20.90/89089079e9326945491d5e6d816eb371ace23d27/s3-2.20.90.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
@@ -89,32 +89,57 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.core/commands/3.3.0-I20070605-0010/f602b5987689e09820fe1a3e67b25c423a1214ae/commands-3.3.0-I20070605-0010.jar">
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/9654e91a61d7662c36be6710ef8e720c0e3f9807/httpclient-4.5.13-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.equinox/common/3.3.0-v20070426/aa5199e6be73b50c2b26a9c8c12b4e16b73563c8/common-3.3.0-v20070426.jar">
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.ui/ide/3.3.0-I20070620/55455f0a6514caaa03ab3dfb06c2dc204596e50c/ide-3.3.0-I20070620.jar">
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.17.2/88b2d34add2e0370c6a6d03ac7b3609b143e46bd/log4j-core-2.17.2-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.17.2/fa43ba4467f5300b16d1e0742934149bfc5ac564/log4j-core-2.17.2.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.ui/workbench/3.3.0-I20070608-1100/c357c05b29fc30da3c8e370a6353016678c3c897/workbench-3.3.0-I20070608-1100.jar">
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.17.2/91a89f75de4f567c38dc7ec9f83f2a1afd2c2915/log4j-api-2.17.2-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.17.2/f42d6afa111b4dec5d2aea0fe2197240749a4ea6/log4j-api-2.17.2.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse/jface/3.3.0-I20070606-0010/fab41922c1da3b81d910b33579044acd6698a10e/jface-3.3.0-I20070606-0010.jar">
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.core.commands/3.11.100/88054c976a9180921700e4304f51067fb6c88a56/org.eclipse.core.commands-3.11.100-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.core.commands/3.11.100/e61fe51e6bccd535d1f1e958349804e1fd443779/org.eclipse.core.commands-3.11.100.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.swt.cocoa.macosx.x86_64/3.109.0/b40f9c235095b33004f845dea69c25fecf5e304c/org.eclipse.swt.cocoa.macosx.x86_64-3.109.0-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.swt.cocoa.macosx.x86_64/3.109.0/753b235700a4ade0194d279af9d8913181de34e3/org.eclipse.swt.cocoa.macosx.x86_64-3.109.0.jar">
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.equinox.common/3.18.100/e5094612702cb78be166ef6318b9a36c1fa5cd71/org.eclipse.equinox.common-3.18.100-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.equinox.common/3.18.100/cadfed6701c00c4d6cc6d72f6c4d7731f4c72b54/org.eclipse.equinox.common-3.18.100.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.ui.ide/3.21.100/fb9d091a022bb6fbfc7536463c690aabdbb1600a/org.eclipse.ui.ide-3.21.100-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.ui.ide/3.21.100/a7de2adde14740c4e3589f8016369fbc8d621240/org.eclipse.ui.ide-3.21.100.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.ui.workbench/3.130.0/e190ce543b015e5a41f5ecb524dd43e9d6e80049/org.eclipse.ui.workbench-3.130.0-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.ui.workbench/3.130.0/7bf4837d7eedd8630cc8b45c77e91e55a686850c/org.eclipse.ui.workbench-3.130.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.jface/3.31.0/504642a37a73e380dd6df72844110bc3b2d1a989/org.eclipse.jface-3.31.0-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.jface/3.31.0/35476e3294bc13f201d0adfa736d69c1c2eff559/org.eclipse.jface-3.31.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.osgi/3.18.500/f49f4b23b3d858a12fee19dba97cb14a260e3aed/org.eclipse.osgi-3.18.500-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.osgi/3.18.500/ce66d8eaec4eddf1bf2b391ca0208e4ab37bacca/org.eclipse.osgi-3.18.500.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.swt.cocoa.macosx.aarch64/3.124.200/51d7414fdb5dd75004f517007a72a940b6de058/org.eclipse.swt.cocoa.macosx.aarch64-3.124.200-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.eclipse.platform/org.eclipse.swt.cocoa.macosx.aarch64/3.124.200/7dd3ae8d14a33c7312543249d936d84a0ae658bb/org.eclipse.swt.cocoa.macosx.aarch64-3.124.200.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
@@ -184,11 +209,6 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/9654e91a61d7662c36be6710ef8e720c0e3f9807/httpclient-4.5.13-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.13/d6e6365dac44108fb2cc0684daea0d40bc6609f5/httpcore-4.4.13-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.13/853b96d3afbb7bf8cc303fe27ee96836a10c1834/httpcore-4.4.13.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
@@ -205,11 +225,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.eventstream/eventstream/1.0.1/7121512c9d99c6b4c6e7a6a858bb05cb2643d6b3/eventstream-1.0.1-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/software.amazon.eventstream/eventstream/1.0.1/6ff8649dffc5190366ada897ba8525a836297784/eventstream-1.0.1.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry sourcepath="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" kind="lib" path="/Users/turbou/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>

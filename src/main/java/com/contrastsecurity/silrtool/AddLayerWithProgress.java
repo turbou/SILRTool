@@ -80,8 +80,8 @@ public class AddLayerWithProgress extends LayerWithProgress {
                     valueMap2.remove("AWS_LAMBDA_EXEC_WRAPPER"); //$NON-NLS-1$
                 }
             }
-            valueMap2.putIfAbsent("AWS_LAMBDA_EXEC_WRAPPER", ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER)); //$NON-NLS-1$
-            valueMap2.putIfAbsent("CONTRAST_BUCKET", ps.getString(PreferenceConstants.ENV_S3_BUCKET)); //$NON-NLS-1$
+            valueMap2.put("AWS_LAMBDA_EXEC_WRAPPER", ps.getString(PreferenceConstants.ENV_EXEC_WRAPPER)); //$NON-NLS-1$
+            valueMap2.put("CONTRAST_BUCKET", ps.getString(PreferenceConstants.ENV_S3_BUCKET)); //$NON-NLS-1$
             Environment environment = Environment.builder().variables(valueMap2).build();
             // sub1Monitor.worked(15);
 
