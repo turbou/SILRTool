@@ -2,7 +2,7 @@
 
 JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"
 APP_NAME="SILRTool"
-APP_VERSION="1.0.2"
+APP_VERSION="1.0.3"
 SM_KEY_PAIR="key_455812447"
 
 jpackage \
