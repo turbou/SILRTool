@@ -119,15 +119,11 @@ public class Main {
     private void initialize() {
         try {
             String homeDir = System.getProperty("user.home"); //$NON-NLS-1$
-            this.ps = new PreferenceStore(homeDir + "\\silrtool.properties"); //$NON-NLS-1$
-            if (OS.isFamilyMac()) {
-                this.ps = new PreferenceStore(homeDir + "/silrtool.properties"); //$NON-NLS-1$
-            }
+            this.ps = new PreferenceStore(homeDir + System.getProperty("file.separator") + "silrtool.properties"); //$NON-NLS-1$ //$NON-NLS-2$
             try {
                 this.ps.load();
             } catch (FileNotFoundException fnfe) {
-                this.ps = new PreferenceStore("silrtool.properties"); //$NON-NLS-1$
-                this.ps.load();
+                this.ps.save();
             }
         } catch (FileNotFoundException fnfe) {
         } catch (Exception e) {
